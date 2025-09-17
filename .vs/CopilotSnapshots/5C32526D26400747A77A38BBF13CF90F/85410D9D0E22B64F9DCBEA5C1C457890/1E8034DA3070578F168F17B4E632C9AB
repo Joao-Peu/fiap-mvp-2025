@@ -1,0 +1,15 @@
+﻿using FIAPCloudGames.Domain.Entities;
+
+namespace FIAPCloudGames.Application.Services
+{
+    public class UserService
+    {
+        // No momento, apenas simula persistência. Depois será integrado ao repositório/EF.
+        public User Register(string name, string email, string password)
+        {
+            var user = new User(name, email, password);
+            // Persistência será implementada na camada Infra
+            return user;
+        }
+    }
+}

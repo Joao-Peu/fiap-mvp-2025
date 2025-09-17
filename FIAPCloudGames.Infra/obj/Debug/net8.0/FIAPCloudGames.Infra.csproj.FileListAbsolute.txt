@@ -1,0 +1,15 @@
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.AssemblyInfoInputs.cache
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.AssemblyInfo.cs
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.csproj.CoreCompileInputs.cache
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\bin\Debug\net8.0\FIAPCloudGames.Infra.deps.json
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\bin\Debug\net8.0\FIAPCloudGames.Infra.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\bin\Debug\net8.0\FIAPCloudGames.Infra.pdb
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\bin\Debug\net8.0\FIAPCloudGames.Domain.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\bin\Debug\net8.0\FIAPCloudGames.Domain.pdb
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.csproj.AssemblyReference.cache
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPClou.D4801DA7.Up2Date
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\refint\FIAPCloudGames.Infra.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\FIAPCloudGames.Infra.pdb
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Infra\obj\Debug\net8.0\ref\FIAPCloudGames.Infra.dll

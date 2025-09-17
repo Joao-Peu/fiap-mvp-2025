@@ -1,0 +1,15 @@
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.AssemblyInfoInputs.cache
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.AssemblyInfo.cs
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.csproj.CoreCompileInputs.cache
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\bin\Debug\net8.0\FIAPCloudGames.Application.deps.json
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\bin\Debug\net8.0\FIAPCloudGames.Application.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\bin\Debug\net8.0\FIAPCloudGames.Application.pdb
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\bin\Debug\net8.0\FIAPCloudGames.Domain.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\bin\Debug\net8.0\FIAPCloudGames.Domain.pdb
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.csproj.AssemblyReference.cache
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPClou.14219806.Up2Date
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\refint\FIAPCloudGames.Application.dll
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\FIAPCloudGames.Application.pdb
+C:\Users\pmazurek\Documents\PosGraduacao\FIAPCloudGames\FIAPCloudGames.Application\obj\Debug\net8.0\ref\FIAPCloudGames.Application.dll

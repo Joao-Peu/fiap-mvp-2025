@@ -1,0 +1,8 @@
+﻿namespace FIAPCloudGames.Application.Dtos
+{
+    public class AcquireGameDto
+    {
+        public Guid UserId { get; set; }
+        public Guid GameId { get; set; }
+    }
+}

@@ -1,0 +1,76 @@
+﻿using FIAPCloudGames.Application.Services;
+using FIAPCloudGames.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FIAPCloudGames.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
+    {
+        private readonly UserService _userService;
+        public UserController(UserService userService)
+        {
+            _userService = userService;
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] UserDto dto)
+        {
+            try
+            {
+                var user = _userService.Register(dto.Name, dto.Email, dto.Password);
+                return Created($"/api/user/{user.Id}", user);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var users = _userService.GetAll();
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(Guid id)
+        {
+            var user = _userService.GetById(id);
+            if (user == null) return NotFound();
+            return Ok(user);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(Guid id, [FromBody] UserDto dto)
+        {
+            try
+            {
+                var user = _userService.Update(id, dto.Name, dto.Email, dto.Password);
+                if (user == null) return NotFound();
+                return Ok(user);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
+        {
+            var success = _userService.Delete(id);
+            if (!success) return NotFound();
+            return NoContent();
+        }
+    }
+
+    public class UserDto
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}
