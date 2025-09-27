@@ -10,4 +10,6 @@ public interface ILibraryRepository
     Library? GetByUserId(Guid userId);
     void Remove(Library library);
     void Update(Library library);
+    bool ContainsGameAsync(Guid libraryId, Guid gameId);
+
 }

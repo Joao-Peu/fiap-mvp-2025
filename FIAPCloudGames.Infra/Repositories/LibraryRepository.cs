@@ -1,6 +1,7 @@
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Interfaces;
 using FIAPCloudGames.Infra.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace FIAPCloudGames.Infra.Repositories
 {
@@ -39,6 +40,11 @@ namespace FIAPCloudGames.Infra.Repositories
         public Library? GetByUserId(Guid userId)
         {
             return _context.Libraries.FirstOrDefault(u => u.User.Id == userId);
+        }
+
+        public async bool ContainsGameAsync(Guid libraryId, Guid gameId)
+        {
+           return (await _context.Set<LibraryGame>().FirstOrDefaultAsync(x => x.Game.Id == gameId && x.Library.Id == libraryId)) != null;
         }
     }
 }

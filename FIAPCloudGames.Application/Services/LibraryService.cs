@@ -37,9 +37,13 @@ namespace FIAPCloudGames.Application.Services
 
         public bool AcquireGame(Guid userId, Guid gameId)
         {
-            // ToDo: criar exceptions especializadas
             var library = libraryRepository.GetByUserId(userId) ?? throw new Exception("Não foi possível obter a biblioteca para o usuário.");
             var game = gameRepository.GetById(gameId) ?? throw new Exception($"Não foi possível encontrar o jogo com id '{gameId}'.");
+            if (libraryRepository.ContainsGameAsync(library.Id, gameId))
+            {
+                throw new Exception("O jogo já existe na biblioteca.");
+            }
+
             var ownedGame = new LibraryGame(library, game);
             library.AddAcquiredGame(ownedGame);
             libraryRepository.Update(library);
