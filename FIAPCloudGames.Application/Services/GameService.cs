@@ -1,12 +1,10 @@
+using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
-using FIAPCloudGames.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using FIAPCloudGames.Domain.Interfaces;
 
 namespace FIAPCloudGames.Application.Services
 {
-    public class GameService
+    public class GameService : IGameService
     {
         private readonly IGameRepository _gameRepository;
         public GameService(IGameRepository gameRepository)
@@ -21,18 +19,25 @@ namespace FIAPCloudGames.Application.Services
             return game;
         }
 
-        public IEnumerable<Game> GetAll() => _gameRepository.GetAll();
+        public IEnumerable<Game> GetAll()
+        {
+            return _gameRepository.GetAll();
+        }
 
-        public Game? GetById(Guid id) => _gameRepository.GetById(id);
+        public Game? GetById(Guid id)
+        {
+            return _gameRepository.GetById(id);
+        }
 
         public Game? Update(Guid id, string title, string description, DateTime releaseDate, decimal price)
         {
             var game = _gameRepository.GetById(id);
-            if (game == null) return null;
-            typeof(Game).GetProperty("Title")!.SetValue(game, title);
-            typeof(Game).GetProperty("Description")!.SetValue(game, description);
-            typeof(Game).GetProperty("ReleaseDate")!.SetValue(game, releaseDate);
-            typeof(Game).GetProperty("Price")!.SetValue(game, price);
+            if (game == null)
+            {
+                return null;
+            }
+
+            game.Update(title, description, releaseDate, price);
             _gameRepository.Update(game);
             return game;
         }
@@ -40,7 +45,11 @@ namespace FIAPCloudGames.Application.Services
         public bool Delete(Guid id)
         {
             var game = _gameRepository.GetById(id);
-            if (game == null) return false;
+            if (game == null)
+            {
+                return false;
+            }
+
             _gameRepository.Remove(game);
             return true;
         }
