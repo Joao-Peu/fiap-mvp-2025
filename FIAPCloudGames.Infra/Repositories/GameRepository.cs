@@ -1,5 +1,5 @@
 using FIAPCloudGames.Domain.Entities;
-using FIAPCloudGames.Domain.Repositories;
+using FIAPCloudGames.Domain.Interfaces;
 using FIAPCloudGames.Infra.Persistence;
 
 namespace FIAPCloudGames.Infra.Repositories
