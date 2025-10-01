@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FIAPCloudGames.Infra.Repositories;
+using FIAPCloudGames.Domain.Repositories;
 using System.Reflection;
-using FIAPCloudGames.Domain.Interfaces;
-using FIAPCloudGames.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,14 +23,9 @@ builder.Services.AddDbContext<CloudGamesDbContext>(options =>
 
 // Registrar repositórios e serviços
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
-builder.Services.AddScoped<IGameService, GameService>();
-
-builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
-builder.Services.AddScoped<ILibraryService, LibraryService>();
-
+builder.Services.AddScoped<GameService>();
 
 // Configuração JWT
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_123!";

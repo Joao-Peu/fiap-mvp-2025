@@ -1,5 +1,6 @@
 using FIAPCloudGames.Application.Dtos;
-using FIAPCloudGames.Application.Interfaces;
+using FIAPCloudGames.Application.Services;
+using FIAPCloudGames.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,13 @@ namespace FIAPCloudGames.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
-    public class UserController(IUserService userService) : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IUserService _userService = userService;
+        private readonly UserService _userService;
+        public UserController(UserService userService)
+        {
+            _userService = userService;
+        }
 
         /// <summary>
         /// Cria um novo usuário.
@@ -51,11 +56,7 @@ namespace FIAPCloudGames.API.Controllers
         public IActionResult GetById(Guid id)
         {
             var user = _userService.GetById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
+            if (user == null) return NotFound();
             return Ok(user);
         }
 
@@ -68,11 +69,7 @@ namespace FIAPCloudGames.API.Controllers
             try
             {
                 var user = _userService.Update(id, dto.Name, dto.Email, dto.Password);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-
+                if (user == null) return NotFound();
                 return Ok(user);
             }
             catch (ArgumentException ex)
@@ -88,13 +85,31 @@ namespace FIAPCloudGames.API.Controllers
         public IActionResult Delete(Guid id)
         {
             var success = _userService.Delete(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-
+            if (!success) return NotFound();
             return NoContent();
         }
 
+        /// <summary>
+        /// Adquire um jogo para o usuário.
+        /// </summary>
+        [HttpPost("acquire-game")]
+        [Authorize(Roles = "Admin,User")]
+        public IActionResult AcquireGame([FromBody] AcquireGameDto dto)
+        {
+            var success = _userService.AcquireGame(dto.UserId, dto.GameId);
+            if (!success) return BadRequest(new { error = "Usuário ou jogo não encontrado." });
+            return Ok(new { message = "Jogo adquirido com sucesso." });
+        }
+
+        /// <summary>
+        /// Lista biblioteca de jogos adquiridos do usuário.
+        /// </summary>
+        [HttpGet("{id}/library")]
+        [Authorize(Roles = "Admin,User")]
+        public IActionResult GetLibrary(Guid id)
+        {
+            var games = _userService.GetLibrary(id);
+            return Ok(games);
+        }
     }
 }

@@ -10,14 +10,17 @@ namespace FIAPCloudGames.Infra.Persistence
 
         public DbSet<User> Users { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<Library> Libraries { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // ToDo: mapear as entidades em configurations separados.
             base.OnModelCreating(modelBuilder);
-            
+            // Configuração para ValueObjects
+            modelBuilder.Entity<User>().OwnsOne(u => u.Email);
+            modelBuilder.Entity<User>().OwnsOne(u => u.Password);
+            // Relacionamento User.Library (jogos adquiridos)
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Library)
+                .WithMany();
         }
     }
 }

@@ -1,8 +1,15 @@
-using FIAPCloudGames.Domain.Enums;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using FIAPCloudGames.Domain.ValueObject;
 
 namespace FIAPCloudGames.Domain.Entities
 {
+    public enum UserRole
+    {
+        User,
+        Admin
+    }
+
     public class User
     {
         public Guid Id { get; private set; }
@@ -10,30 +17,36 @@ namespace FIAPCloudGames.Domain.Entities
         public Email Email { get; private set; }
         public Password Password { get; private set; }
         public UserRole Role { get; private set; }
+        public ICollection<Game> Library { get; private set; } = new List<Game>();
 
         public User(string name, string email, string password, UserRole role = UserRole.User)
         {
             Id = Guid.NewGuid();
-            UpdateName(name);
-            UpdateEmail(email);
-            UpdatePassword(password);
+            SetName(name);
+            SetEmail(email);
+            SetPassword(password);
             Role = role;
         }
 
+        public void AcquireGame(Game game)
+        {
+            if (!Library.Contains(game))
+                Library.Add(game);
+        }
 
-        public void UpdateName(string name)
+        private void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Nome é obrigatório.");
             Name = name;
         }
 
-        public void UpdateEmail(string email)
+        private void SetEmail(string email)
         {
             Email = new Email(email);
         }
 
-        public void UpdatePassword(string password)
+        private void SetPassword(string password)
         {
             Password = new Password(password);
         }

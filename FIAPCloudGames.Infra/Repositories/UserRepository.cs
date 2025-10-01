@@ -1,5 +1,5 @@
 using FIAPCloudGames.Domain.Entities;
-using FIAPCloudGames.Domain.Interfaces;
+using FIAPCloudGames.Domain.Repositories;
 using FIAPCloudGames.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
