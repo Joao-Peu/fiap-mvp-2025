@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace FIAPCloudGames.Domain.Entities
 {
     public class Game
@@ -11,6 +13,15 @@ namespace FIAPCloudGames.Domain.Entities
         public Game(string title, string description, DateTime releaseDate, decimal price)
         {
             Id = Guid.NewGuid();
+            Title = title;
+            Description = description;
+            ReleaseDate = releaseDate;
+            Price = price;
+        }
+
+        public void Update(string title, string description, DateTime releaseDate, decimal price)
+        {
+            // ToDo: validar valor menor que zero, titulo vazio
             Title = title;
             Description = description;
             ReleaseDate = releaseDate;

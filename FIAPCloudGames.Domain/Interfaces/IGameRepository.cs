@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace FIAPCloudGames.Domain.Repositories
+namespace FIAPCloudGames.Domain.Interfaces
 {
     public interface IGameRepository
     {
