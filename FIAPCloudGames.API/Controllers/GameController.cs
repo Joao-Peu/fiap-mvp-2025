@@ -25,7 +25,6 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
         public IActionResult GetAll()
         {
             var games = _gameService.GetAll();
@@ -33,7 +32,6 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,User")]
         public IActionResult GetById(Guid id)
         {
             var game = _gameService.GetById(id);
