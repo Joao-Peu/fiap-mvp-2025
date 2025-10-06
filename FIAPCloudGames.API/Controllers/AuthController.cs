@@ -11,6 +11,7 @@ namespace FIAPCloudGames.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class AuthController : ControllerBase
     {
         private readonly UserService _userService;
