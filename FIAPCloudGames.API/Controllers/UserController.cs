@@ -23,6 +23,8 @@ namespace FIAPCloudGames.API.Controllers
         /// Cria um novo usuário.
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Create([FromBody] UserDto dto)
         {
             try
@@ -40,7 +42,7 @@ namespace FIAPCloudGames.API.Controllers
         /// Lista todos os usuários.
         /// </summary>
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
@@ -67,6 +69,8 @@ namespace FIAPCloudGames.API.Controllers
         /// Atualiza dados de um usuário.
         /// </summary>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Update(Guid id, [FromBody] UserDto dto)
         {
             try
@@ -89,6 +93,7 @@ namespace FIAPCloudGames.API.Controllers
         /// Remove um usuário.
         /// </summary>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(Guid id)
         {
             var success = _userService.Delete(id);
