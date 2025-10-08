@@ -17,7 +17,7 @@ namespace FIAPCloudGames.API.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
-        }   
+        }
 
         /// <summary>
         /// Cria um novo usuário.
@@ -45,7 +45,15 @@ namespace FIAPCloudGames.API.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult GetAll()
         {
-            var users = _userService.GetAll();
+            var users = _userService.GetAll()
+                .Select(u => new UserReadDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email?.Value
+
+                });
+
             return Ok(users);
         }
 
@@ -62,7 +70,14 @@ namespace FIAPCloudGames.API.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            var userDto = new UserReadDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email?.Value
+            };
+
+            return Ok(userDto);
         }
 
         /// <summary>
