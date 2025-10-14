@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace FIAPCloudGames.Domain.ValueObject
 {
@@ -9,7 +9,7 @@ namespace FIAPCloudGames.Domain.ValueObject
         {
             if (string.IsNullOrWhiteSpace(value) || !IsValidEmail(value))
             {
-                throw new ArgumentException("E-mail inv�lido.");
+                throw new ArgumentException("E-mail inválido.");
             }
 
             Value = value;
