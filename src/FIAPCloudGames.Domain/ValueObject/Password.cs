@@ -1,4 +1,4 @@
-namespace FIAPCloudGames.Domain.ValueObject
+ï»¿namespace FIAPCloudGames.Domain.ValueObject
 {
     public class Password
     {
@@ -9,7 +9,7 @@ namespace FIAPCloudGames.Domain.ValueObject
         {
             if (!IsPasswordValid(value))
             {
-                throw new ArgumentException("Senha deve ter no mínimo 8 caracteres, incluindo letras, números e caracteres especiais.");
+                throw new ArgumentException("Senha deve ter no mÃ­nimo 8 caracteres, incluindo letras, nÃºmeros e caracteres especiais.");
             }
 
             Value = value;

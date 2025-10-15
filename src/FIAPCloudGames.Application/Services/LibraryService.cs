@@ -1,4 +1,4 @@
-using FIAPCloudGames.Application.Interfaces;
+Ôªøusing FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Interfaces;
 using FIAPCloudGames.Domain.ValueObject;
@@ -17,7 +17,7 @@ namespace FIAPCloudGames.Application.Services
         }
         public Library GetLibraryByUserId(Guid userId)
         {
-            var library = libraryRepository.GetByUserId(userId) ?? throw new Exception($"N„o foi criada biblioteca para o usu·rio {userId}.");
+            var library = libraryRepository.GetByUserId(userId) ?? throw new Exception($"N√£o foi criada biblioteca para o usu√°rio {userId}.");
             return library;
         }
 
@@ -25,11 +25,11 @@ namespace FIAPCloudGames.Application.Services
 
         public Library Register(Guid userId)
         {
-            var user = userRepository.GetById(userId) ?? throw new Exception($"Usu·rio n„o encontrado para o id {userId}");
+            var user = userRepository.GetById(userId) ?? throw new Exception($"Usu√°rio n√£o encontrado para o id {userId}");
             var existingLibrary = libraryRepository.GetByUserId(userId);
             if (existingLibrary != null)
             {
-                throw new Exception($"J· existe uma biblioteca criada para o usu·rio {user.Name}.");
+                throw new Exception($"J√° existe uma biblioteca criada para o usu√°rio {user.Name}.");
             }
 
             return new Library(user);
@@ -37,11 +37,11 @@ namespace FIAPCloudGames.Application.Services
 
         public bool AcquireGame(Guid userId, Guid gameId)
         {
-            var library = libraryRepository.GetByUserId(userId) ?? throw new Exception("N„o foi possÌvel obter a biblioteca para o usu·rio.");
-            var game = gameRepository.GetById(gameId) ?? throw new Exception($"N„o foi possÌvel encontrar o jogo com id '{gameId}'.");
+            var library = libraryRepository.GetByUserId(userId) ?? throw new Exception("N√£o foi poss√≠vel obter a biblioteca para o usu√°rio.");
+            var game = gameRepository.GetById(gameId) ?? throw new Exception($"N√£o foi poss√≠vel encontrar o jogo com id '{gameId}'.");
             if (libraryRepository.ContainsGameAsync(library.Id, gameId))
             {
-                throw new Exception("O jogo j· existe na biblioteca.");
+                throw new Exception("O jogo j√° existe na biblioteca.");
             }
 
             var ownedGame = new LibraryGame(library, game);
@@ -52,7 +52,7 @@ namespace FIAPCloudGames.Application.Services
 
         public bool Delete(Guid id)
         {
-            var library = libraryRepository.GetById(id) ?? throw new Exception($"Biblioteca n„o foi encontrada com o id {id}");
+            var library = libraryRepository.GetById(id) ?? throw new Exception($"Biblioteca n√£o foi encontrada com o id {id}");
             if (library.IsDeleted)
             {
                 return false;
