@@ -1,5 +1,6 @@
 using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
+using FIAPCloudGames.Domain.Exceptions;
 using FIAPCloudGames.Domain.Interfaces;
 
 namespace FIAPCloudGames.Application.Services
@@ -12,45 +13,51 @@ namespace FIAPCloudGames.Application.Services
             _gameRepository = gameRepository;
         }
 
-        public Game Register(string title, string description, DateTime releaseDate, decimal price)
+        public async Task<Game> RegisterAsync(string title, string description, DateTime releaseDate, decimal price)
         {
-            var game = new Game(title, description, releaseDate, price);
-            _gameRepository.Add(game);
+            ArgumentException.ThrowIfNullOrWhiteSpace(title, nameof(title));
+            if (price < 0)
+            {
+                throw new GameNegativePriceException();
+            }
+
+            var game = Game.New(Guid.NewGuid(), title, description, releaseDate, price);
+            await _gameRepository.AddAsync(game);
             return game;
         }
 
-        public IEnumerable<Game> GetAll()
+        public async Task<IEnumerable<Game>> GetAllAsync()
         {
-            return _gameRepository.GetAll();
+            return await _gameRepository.GetAllAsync();
         }
 
-        public Game? GetById(Guid id)
+        public async Task<Game?> GetByIdAsync(Guid id)
         {
-            return _gameRepository.GetById(id);
+            return await _gameRepository.GetByIdAsync(id);
         }
 
-        public Game? Update(Guid id, string title, string description, DateTime releaseDate, decimal price)
+        public async Task<Game?> UpdateAsync(Guid id, string? title, string? description, DateTime? releaseDate, decimal? price)
         {
-            var game = _gameRepository.GetById(id);
+            var game = await _gameRepository.GetByIdAsync(id);
             if (game == null)
             {
                 return null;
             }
 
             game.Update(title, description, releaseDate, price);
-            _gameRepository.Update(game);
+            await _gameRepository.UpdateAsync(game);
             return game;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var game = _gameRepository.GetById(id);
+            var game = await _gameRepository.GetByIdAsync(id);
             if (game == null)
             {
                 return false;
             }
 
-            _gameRepository.Remove(game);
+            await _gameRepository.RemoveAsync(game);
             return true;
         }
     }

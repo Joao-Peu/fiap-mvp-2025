@@ -9,11 +9,11 @@ namespace FIAPCloudGames.Application.Interfaces
 {
     public interface IUserService
     {
-        User? Authenticate(string email, string password);
-        bool Delete(Guid id);
-        IEnumerable<User> GetAll();
-        User? GetById(Guid id);
-        User Register(string name, string email, string password);
-        User? Update(Guid id, string name, string email, string password);
+        Task<User?> AuthenticateAsync(string email, string password);
+        Task<bool> DeleteAsync(Guid id);
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<User?> GetByIdAsync(Guid id);
+        Task<User> RegisterAsync(string name, string email, string password);
+        Task<User?> UpdateAsync(Guid id, string name, string email, string password);
     }
 }

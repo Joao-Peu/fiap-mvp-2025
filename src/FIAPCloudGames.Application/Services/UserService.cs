@@ -8,26 +8,26 @@ namespace FIAPCloudGames.Application.Services
     {
         private readonly IUserRepository _userRepository = userRepository;
 
-        public User Register(string name, string email, string password)
+        public async Task<User> RegisterAsync(string name, string email, string password)
         {
             var user = new User(name, email, password);
-            _userRepository.Add(user);
+            await _userRepository.AddAsync(user);
             return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return _userRepository.GetAll();
+            return await _userRepository.GetAllAsync();
         }
 
-        public User? GetById(Guid id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
-            return _userRepository.GetById(id);
+            return await _userRepository.GetByIdAsync(id);
         }
 
-        public User? Update(Guid id, string name, string email, string password)
+        public async Task<User?> UpdateAsync(Guid id, string name, string email, string password)
         {
-            var user = _userRepository.GetById(id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
                 return null;
@@ -36,25 +36,25 @@ namespace FIAPCloudGames.Application.Services
             user.UpdateName(name);
             user.UpdateEmail(email);
             user.UpdatePassword(password);
-            _userRepository.Update(user);
+            await _userRepository.UpdateAsync(user);
             return user;
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var user = _userRepository.GetById(id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
                 return false;
             }
 
-            _userRepository.Remove(user);
+            await _userRepository.RemoveAsync(user);
             return true;
         }
 
-        public User? Authenticate(string email, string password)
+        public async Task<User?> AuthenticateAsync(string email, string password)
         {
-            var user = _userRepository.GetByEmail(email);
+            var user = await _userRepository.GetByEmailAsync(email);
             if (user != null && user.Password.Value == password)
             {
                 return user;

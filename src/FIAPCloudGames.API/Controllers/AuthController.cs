@@ -25,11 +25,11 @@ namespace FIAPCloudGames.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public IActionResult Login([FromBody] LoginDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = _userService.Authenticate(dto.Email, dto.Password);
+            var user = await _userService.AuthenticateAsync(dto.Email, dto.Password);
             if (user == null)
-                return Unauthorized(new { error = "Usuário ou senha inválidos." });
+                return Unauthorized(new { error = "Usuï¿½rio ou senha invï¿½lidos." });
 
             var jwtKey = _config["Jwt:Key"] ?? "super_secret_key_123!";
             var claims = new[]

@@ -1,25 +1,25 @@
 namespace FIAPCloudGames.Application.Dtos
 {
     /// <summary>
-    /// DTO para dados de jogo.
+    /// DTO para criar jogo.
     /// </summary>
-    public class GameDto
+    public class CreateGameDto
     {
         /// <summary>
         /// Título do jogo.
         /// </summary>
-        public string Title { get; set; }
+        public required string Title { get; set; }
         /// <summary>
         /// Descrição do jogo.
         /// </summary>
-        public string Description { get; set; }
+        public required string Description { get; set; }
         /// <summary>
         /// Data de lançamento.
         /// </summary>
-        public DateTime ReleaseDate { get; set; }
+        public required DateTime ReleaseDate { get; set; }
         /// <summary>
         /// Preço do jogo.
         /// </summary>
-        public decimal Price { get; set; }
+        public required decimal Price { get; set; }
     }
 }

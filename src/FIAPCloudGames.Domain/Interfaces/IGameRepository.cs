@@ -2,10 +2,10 @@ namespace FIAPCloudGames.Domain.Interfaces
 {
     public interface IGameRepository
     {
-        void Add(Entities.Game game);
-        Entities.Game? GetById(Guid id);
-        IEnumerable<Entities.Game> GetAll();
-        void Update(Entities.Game game);
-        void Remove(Entities.Game game);
+        Task AddAsync(Entities.Game game);
+        Task<Entities.Game?> GetByIdAsync(Guid id);
+        Task<IEnumerable<Entities.Game>> GetAllAsync();
+        Task UpdateAsync(Entities.Game game);
+        Task RemoveAsync(Entities.Game game);
     }
 }

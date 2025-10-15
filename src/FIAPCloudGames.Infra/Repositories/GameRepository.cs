@@ -1,6 +1,7 @@
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Interfaces;
 using FIAPCloudGames.Infra.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace FIAPCloudGames.Infra.Repositories
 {
@@ -12,32 +13,32 @@ namespace FIAPCloudGames.Infra.Repositories
             _context = context;
         }
 
-        public void Add(Game game)
+        public async Task AddAsync(Game game)
         {
-            _context.Games.Add(game);
-            _context.SaveChanges();
+            await _context.Games.AddAsync(game);
+            await _context.SaveChangesAsync();
         }
 
-        public Game? GetById(Guid id)
+        public async Task<Game?> GetByIdAsync(Guid id)
         {
-            return _context.Games.FirstOrDefault(g => g.Id == id);
+            return await _context.Games.FirstOrDefaultAsync(g => g.Id == id);
         }
 
-        public IEnumerable<Game> GetAll()
+        public async Task<IEnumerable<Game>> GetAllAsync()
         {
-            return _context.Games.ToList();
+            return await _context.Games.ToListAsync();
         }
 
-        public void Update(Game game)
+        public async Task UpdateAsync(Game game)
         {
             _context.Games.Update(game);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Remove(Game game)
+        public async Task RemoveAsync(Game game)
         {
             _context.Games.Remove(game);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

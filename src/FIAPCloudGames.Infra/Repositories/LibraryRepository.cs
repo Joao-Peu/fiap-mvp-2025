@@ -9,40 +9,40 @@ namespace FIAPCloudGames.Infra.Repositories
     {
         private readonly CloudGamesDbContext _context = context;
 
-        public void Add(Library library)
+        public async Task AddAsync(Library library)
         {
-            _context.Libraries.Add(library);
-            _context.SaveChanges();
+            await _context.Libraries.AddAsync(library);
+            await _context.SaveChangesAsync();
         }
 
-        public Library? GetById(Guid id)
+        public async Task<Library?> GetByIdAsync(Guid id)
         {
-            return _context.Libraries.FirstOrDefault(u => u.Id == id);
+            return await _context.Libraries.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public IEnumerable<Library> GetAll()
+        public async Task<IEnumerable<Library>> GetAllAsync()
         {
-            return [.. _context.Libraries];
+            return await _context.Libraries.ToListAsync();
         }
 
-        public void Update(Library library)
+        public async Task UpdateAsync(Library library)
         {
             _context.Libraries.Update(library);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Remove(Library library)
+        public async Task RemoveAsync(Library library)
         {
             _context.Libraries.Remove(library);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Library? GetByUserId(Guid userId)
+        public async Task<Library?> GetByUserIdAsync(Guid userId)
         {
-            return _context.Libraries.FirstOrDefault(u => u.User.Id == userId);
+            return await _context.Libraries.FirstOrDefaultAsync(u => u.User.Id == userId);
         }
 
-        public async bool ContainsGameAsync(Guid libraryId, Guid gameId)
+        public async Task<bool> ContainsGameAsync(Guid libraryId, Guid gameId)
         {
            return (await _context.Set<LibraryGame>().FirstOrDefaultAsync(x => x.Game.Id == gameId && x.Library.Id == libraryId)) != null;
         }

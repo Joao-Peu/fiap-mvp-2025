@@ -9,10 +9,10 @@ namespace FIAPCloudGames.Application.Interfaces
 {
     public interface IGameService
     {
-        bool Delete(Guid id);
-        IEnumerable<Game> GetAll();
-        Game? GetById(Guid id);
-        Game Register(string title, string description, DateTime releaseDate, decimal price);
-        Game? Update(Guid id, string title, string description, DateTime releaseDate, decimal price);
+        Task<bool> DeleteAsync(Guid id);
+        Task<IEnumerable<Game>> GetAllAsync();
+        Task<Game?> GetByIdAsync(Guid id);
+        Task<Game> RegisterAsync(string title, string description, DateTime releaseDate, decimal price);
+        Task<Game?> UpdateAsync(Guid id, string? title, string? description, DateTime? releaseDate, decimal? price);
     }
 }

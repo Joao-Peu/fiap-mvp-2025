@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAPCloudGames.Infra", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAPCloudGames.Tests", "test\FIAPCloudGames.Tests\FIAPCloudGames.Tests.csproj", "{C02EFE90-471F-47D1-BFE4-D405979D2872}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2FA7F107-33AE-4F65-85C3-F9D081E9859F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D018DBC0-FCD7-436F-BC69-73B5AD3859BF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6DD4468D-7BB3-43B4-92CD-456DF78ED14A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{8968B36C-14AC-4CF0-BD39-2325CBF88BB6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{ADBAA3AA-1450-4A9C-8206-88436E9935CB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{C02EFE90-471F-47D1-BFE4-D405979D2872} = {2FA7F107-33AE-4F65-85C3-F9D081E9859F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE19D802-3EB3-4965-9C6C-F32B8AF5D912}

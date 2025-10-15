@@ -9,10 +9,10 @@ namespace FIAPCloudGames.Application.Interfaces;
 
 public interface ILibraryService
 {
-    Library Register(Guid userId);
-    bool AcquireGame(Guid userId, Guid gameId);
-    IEnumerable<Library> GetAll();
-    Library GetLibraryByUserId(Guid userId);
-    Library GetById(Guid id);
-    bool Delete(Guid id);
+    Task<Library> RegisterAsync(Guid userId);
+    Task<bool> AcquireGameAsync(Guid userId, Guid gameId);
+    Task<IEnumerable<Library>> GetAllAsync();
+    Task<Library> GetLibraryByUserIdAsync(Guid userId);
+    Task<Library?> GetByIdAsync(Guid id);
+    Task<bool> DeleteAsync(Guid id);
 }
