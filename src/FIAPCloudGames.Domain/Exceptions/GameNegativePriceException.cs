@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FIAPCloudGames.Domain.Exceptions;
+﻿namespace FIAPCloudGames.Domain.Exceptions;
 
 /// <summary>
 /// Exception para indicar que o preço de um jogo é negativo.
