@@ -4,12 +4,12 @@ namespace FIAPCloudGames.Domain.Interfaces;
 
 public interface ILibraryRepository
 {
-    void Add(Library library);
-    IEnumerable<Library> GetAll();
-    Library? GetById(Guid id);
-    Library? GetByUserId(Guid userId);
-    void Remove(Library library);
-    void Update(Library library);
-    bool ContainsGameAsync(Guid libraryId, Guid gameId);
+    Task AddAsync(Library library);
+    Task<IEnumerable<Library>> GetAllAsync();
+    Task<Library?> GetByIdAsync(Guid id);
+    Task<Library?> GetByUserIdAsync(Guid userId);
+    Task RemoveAsync(Library library);
+    Task UpdateAsync(Library library);
+    Task<bool> ContainsGameAsync(Guid libraryId, Guid gameId);
 
 }

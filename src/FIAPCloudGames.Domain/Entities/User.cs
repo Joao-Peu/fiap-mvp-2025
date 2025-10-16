@@ -23,8 +23,7 @@ namespace FIAPCloudGames.Domain.Entities
 
         public void UpdateName(string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Nome é obrigatório.");
+            ArgumentException.ThrowIfNullOrWhiteSpace(name, nameof(name));
             Name = name;
         }
 

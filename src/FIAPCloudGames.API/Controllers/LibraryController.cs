@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FIAPCloudGames.API.Controllers
 {
     /// <summary>
-    /// Gerencia operações de usuários.
+    /// Gerencia operaï¿½ï¿½es de usuï¿½rios.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -14,14 +14,14 @@ namespace FIAPCloudGames.API.Controllers
     public class LibraryController(ILibraryService libraryService) : ControllerBase
     {
         /// <summary>
-        /// Cria uma nova biblioteca para o usuário.
+        /// Cria uma nova biblioteca para o usuï¿½rio.
         /// </summary>
         [HttpPost]
-        public IActionResult Create([FromBody] LibraryDto dto)
+        public async Task<IActionResult> Create([FromBody] LibraryDto dto)
         {
             try
             {
-                var library = libraryService.Register(dto.UserId);
+                var library = await libraryService.RegisterAsync(dto.UserId);
                 return Created($"/api/library/{library.Id}", library);
             }
             catch (ArgumentException ex)
@@ -35,9 +35,9 @@ namespace FIAPCloudGames.API.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var libraries = libraryService.GetAll();
+            var libraries = await libraryService.GetAllAsync();
             return Ok(libraries);
         }
 
@@ -46,9 +46,9 @@ namespace FIAPCloudGames.API.Controllers
         /// </summary>
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var library = libraryService.GetById(id);
+            var library = await libraryService.GetByIdAsync(id);
             if (library == null)
             {
                 return NotFound();
@@ -57,12 +57,12 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Remove um usuário.
+        /// Remove um usuï¿½rio.
         /// </summary>
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var success = libraryService.Delete(id);
+            var success = await libraryService.DeleteAsync(id);
             if (!success)
             {
                 return NotFound();
@@ -72,17 +72,17 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Adquire um jogo para o usuário.
+        /// Adquire um jogo para o usuï¿½rio.
         /// </summary>
         [HttpPost("acquire-game")]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult AcquireGame([FromBody] AcquireGameDto dto)
+        public async Task<IActionResult> AcquireGame([FromBody] AcquireGameDto dto)
         {
-            var success = libraryService.AcquireGame(dto.UserId, dto.GameId);
+            var success = await libraryService.AcquireGameAsync(dto.UserId, dto.GameId);
             if (!success)
             {
-                // ToDo: passar essas validações para a service
-                return BadRequest(new { error = "Usuário ou jogo não encontrado." });
+                // ToDo: passar essas validaï¿½ï¿½es para a service
+                return BadRequest(new { error = "Usuï¿½rio ou jogo nï¿½o encontrado." });
             }
 
             return Ok(new { message = "Jogo adquirido com sucesso." });
@@ -93,9 +93,9 @@ namespace FIAPCloudGames.API.Controllers
         /// </summary>
         [HttpGet("user/{userId}")]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult GetLibraryByUserId(Guid userId)
+        public async Task<IActionResult> GetLibraryByUserId(Guid userId)
         {
-            var library = libraryService.GetLibraryByUserId(userId);
+            var library = await libraryService.GetLibraryByUserIdAsync(userId);
             return Ok(library);
         }
     }

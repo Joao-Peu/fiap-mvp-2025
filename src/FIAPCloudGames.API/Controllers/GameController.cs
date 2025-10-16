@@ -18,23 +18,23 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] GameDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateGameDto dto)
         {
-            var game = _gameService.Register(dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
+            var game = await _gameService.RegisterAsync(dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
             return Created($"/api/game/{game.Id}", game);
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var games = _gameService.GetAll();
+            var games = await _gameService.GetAllAsync();
             return Ok(games);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var game = _gameService.GetById(id);
+            var game = await _gameService.GetByIdAsync(id);
             if (game == null)
             {
                 return NotFound();
@@ -43,10 +43,10 @@ namespace FIAPCloudGames.API.Controllers
             return Ok(game);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] GameDto dto)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateGameDto dto)
         {
-            var game = _gameService.Update(id, dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
+            var game = await _gameService.UpdateAsync(id, dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
             if (game == null)
             {
                 return NotFound();
@@ -56,9 +56,9 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var success = _gameService.Delete(id);
+            var success = await _gameService.DeleteAsync(id);
             if (!success)
             {
                 return NotFound();

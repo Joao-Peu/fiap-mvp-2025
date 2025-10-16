@@ -1,3 +1,4 @@
+using FIAPCloudGames.Domain.Exceptions;
 using System.Diagnostics;
 
 namespace FIAPCloudGames.Domain.Entities
@@ -10,22 +11,46 @@ namespace FIAPCloudGames.Domain.Entities
         public DateTime ReleaseDate { get; private set; }
         public decimal Price { get; private set; }
 
-        public Game(string title, string description, DateTime releaseDate, decimal price)
+        private Game(Guid id, string title, string description, DateTime releaseDate, decimal price)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Title = title;
             Description = description;
             ReleaseDate = releaseDate;
             Price = price;
         }
 
-        public void Update(string title, string description, DateTime releaseDate, decimal price)
+        public static Game New(Guid id,string title, string description, DateTime releaseDate, decimal price)
         {
-            // ToDo: validar valor menor que zero, titulo vazio
-            Title = title;
-            Description = description;
-            ReleaseDate = releaseDate;
-            Price = price;
+            return new Game(id, title, description, releaseDate, price);
+        }
+
+        public void Update(string? title, string? description, DateTime? releaseDate, decimal? price)
+        {
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                Title = title;
+            }
+
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                Description = description;
+            }
+
+            if(releaseDate.HasValue)
+            {
+                ReleaseDate = releaseDate.Value;
+            }
+
+            if (price.HasValue)
+            {
+                if (price < 0)
+                {
+                    throw new GameNegativePriceException();
+                }
+
+                Price = price.Value;
+            }
         }
     }
 }

@@ -2,10 +2,10 @@ namespace FIAPCloudGames.Domain.Interfaces;
 
 public interface IUserRepository
 {
-    void Add(Entities.User user);
-    Entities.User? GetById(Guid id);
-    IEnumerable<Entities.User> GetAll();
-    void Update(Entities.User user);
-    void Remove(Entities.User user);
-    Entities.User? GetByEmail(string email);
+    Task AddAsync(Entities.User user);
+    Task<Entities.User?> GetByIdAsync(Guid id);
+    Task<IEnumerable<Entities.User>> GetAllAsync();
+    Task UpdateAsync(Entities.User user);
+    Task RemoveAsync(Entities.User user);
+    Task<Entities.User?> GetByEmailAsync(string email);
 }
