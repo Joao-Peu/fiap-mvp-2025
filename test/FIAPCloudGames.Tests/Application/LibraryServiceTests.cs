@@ -211,7 +211,7 @@ public class LibraryServiceTests
         var result = await _libraryService.DeleteAsync(library.Id);
 
         Assert.False(result);
-        Assert.True(library.IsDeleted);
+        Assert.True(library.IsActive);
         await _libraryRepository.Received(1).UpdateAsync(library);
     }
 

@@ -1,10 +1,6 @@
 ﻿using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Interfaces;
-using FIAPCloudGames.Domain.ValueObject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FIAPCloudGames.Application.Services;
 
@@ -58,8 +54,13 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
     public async Task<bool> DeleteAsync(Guid id)
     {
         var library = await libraryRepository.GetByIdAsync(id) ?? throw new Exception($"Biblioteca não foi encontrada com o id {id}");
+        if (!library.IsActive)
+        {
+            return true;
+        }
+
         library.Delete();
         await libraryRepository.UpdateAsync(library);
-        return !library.IsDeleted;
+        return !library.IsActive;
     }
 }

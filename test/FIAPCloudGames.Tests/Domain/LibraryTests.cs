@@ -15,7 +15,7 @@ public class LibraryTests
 
         Assert.NotNull(library);
         Assert.Equal(user, library.User);
-        Assert.False(library.IsDeleted);
+        Assert.True(library.IsActive);
         Assert.Empty(library.OwnedGames);
     }
 
@@ -28,7 +28,7 @@ public class LibraryTests
 
         library.Delete();
 
-        Assert.True(library.IsDeleted);
+        Assert.False(library.IsActive);
     }
 
     [Fact]

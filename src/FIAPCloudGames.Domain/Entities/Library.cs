@@ -5,19 +5,20 @@ namespace FIAPCloudGames.Domain.Entities;
 public class Library
 {
     public Guid Id { get; private set; }
-    public bool IsDeleted { get; private set; }
+    public bool IsActive { get; private set; }
     public User User { get; private set; }
     public ICollection<LibraryGame> OwnedGames { get; private set; } = [];
 
     public Library(User user)
     {
         User = user;
+        IsActive = true;
         OwnedGames = [];
     }
 
     public void Delete()
     {
-        IsDeleted = true;
+        IsActive = false;
     }
 
     public void AddAcquiredGame(LibraryGame libraryGame)

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FIAPCloudGames.API.Controllers
 {
     /// <summary>
-    /// Gerencia opera��es de usu�rios.
+    /// Gerencia operações de usuários.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -14,7 +14,7 @@ namespace FIAPCloudGames.API.Controllers
     public class LibraryController(ILibraryService libraryService) : ControllerBase
     {
         /// <summary>
-        /// Cria uma nova biblioteca para o usu�rio.
+        /// Cria uma nova biblioteca para o usuário.
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] LibraryDto dto)
@@ -57,7 +57,7 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Remove um usu�rio.
+        /// Remove um usuário.
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
@@ -72,7 +72,7 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Adquire um jogo para o usu�rio.
+        /// Adquire um jogo para o usuário.
         /// </summary>
         [HttpPost("acquire-game")]
         [Authorize(Roles = "Admin,User")]
@@ -81,8 +81,7 @@ namespace FIAPCloudGames.API.Controllers
             var success = await libraryService.AcquireGameAsync(dto.UserId, dto.GameId);
             if (!success)
             {
-                // ToDo: passar essas valida��es para a service
-                return BadRequest(new { error = "Usu�rio ou jogo n�o encontrado." });
+                return BadRequest();
             }
 
             return Ok(new { message = "Jogo adquirido com sucesso." });

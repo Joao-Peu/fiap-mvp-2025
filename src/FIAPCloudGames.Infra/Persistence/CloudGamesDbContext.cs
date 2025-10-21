@@ -1,23 +1,20 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.ValueObject;
 
-namespace FIAPCloudGames.Infra.Persistence
+namespace FIAPCloudGames.Infra.Persistence;
+
+public class CloudGamesDbContext(DbContextOptions<CloudGamesDbContext> options) : DbContext(options)
 {
-    public class CloudGamesDbContext : DbContext
+    public DbSet<User> Users { get; set; }
+    public DbSet<Game> Games { get; set; }
+    public DbSet<Library> Libraries { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public CloudGamesDbContext(DbContextOptions<CloudGamesDbContext> options) : base(options) { }
+        base.OnModelCreating(modelBuilder);
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Game> Games { get; set; }
-        public DbSet<Library> Libraries { get; set; }
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // ToDo: mapear as entidades em configurations separados.
-            base.OnModelCreating(modelBuilder);
-            
-        }
+        modelBuilder.Entity<User>().HasQueryFilter(u => u.IsActive);
+        modelBuilder.Entity<Library>().HasQueryFilter(u => u.IsActive);
     }
 }
