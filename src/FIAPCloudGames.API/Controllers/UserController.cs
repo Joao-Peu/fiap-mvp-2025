@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FIAPCloudGames.API.Controllers
 {
     /// <summary>
-    /// Gerencia opera��es de usu�rios.
+    /// Gerencia operações de usu�rios.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -20,17 +20,16 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Cria um novo usu�rio.
+        /// Cria um novo usuário.
         /// </summary>
         [HttpPost]
         [Authorize(Roles = "Admin")]
-
         public async Task<IActionResult> Create([FromBody] UserDto dto)
         {
             try
             {
-                var user = await _userService.RegisterAsync(dto.Name, dto.Email, dto.Password);
-                return Created($"/api/user/{user.Id}", user);
+                var userDto = await _userService.RegisterAsync(dto.Name, dto.Email, dto.Password);
+                return Created($"/api/user/{userDto.Id}", userDto);
             }
             catch (ArgumentException ex)
             {
@@ -39,49 +38,34 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Lista todos os usu�rios.
+        /// Lista todos os usuários.
         /// </summary>
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
-            var users = (await _userService.GetAllAsync())
-                .Select(u => new UserReadDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Email = u.Email?.Value
-
-                });
-
+            var users = await _userService.GetAllAsync();
             return Ok(users);
         }
 
         /// <summary>
-        /// Busca usu�rio por ID.
+        /// Busca usuário por ID.
         /// </summary>
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _userService.GetByIdAsync(id);
-            if (user == null)
+            var userDto = await _userService.GetByIdAsync(id);
+            if (userDto == null)
             {
                 return NotFound();
             }
-
-            var userDto = new UserReadDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email?.Value
-            };
 
             return Ok(userDto);
         }
 
         /// <summary>
-        /// Atualiza dados de um usu�rio.
+        /// Atualiza dados de um usuário.
         /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
@@ -90,13 +74,13 @@ namespace FIAPCloudGames.API.Controllers
         {
             try
             {
-                var user = await _userService.UpdateAsync(id, dto.Name, dto.Email, dto.Password);
-                if (user == null)
+                var userDto = await _userService.UpdateAsync(id, dto.Name, dto.Email, dto.Password);
+                if (userDto == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(user);
+                return Ok(userDto);
             }
             catch (ArgumentException ex)
             {
@@ -105,7 +89,7 @@ namespace FIAPCloudGames.API.Controllers
         }
 
         /// <summary>
-        /// Remove um usu�rio.
+        /// Remove um usuário.
         /// </summary>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]

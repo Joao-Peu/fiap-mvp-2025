@@ -1,4 +1,5 @@
-﻿using FIAPCloudGames.Domain.Entities;
+﻿using FIAPCloudGames.Application.Dtos;
+using FIAPCloudGames.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace FIAPCloudGames.Application.Interfaces;
 
 public interface ILibraryService
 {
-    Task<Library> RegisterAsync(Guid userId);
+    Task<LibraryReadDto> RegisterAsync(Guid userId);
     Task<bool> AcquireGameAsync(Guid userId, Guid gameId);
-    Task<IEnumerable<Library>> GetAllAsync();
-    Task<Library> GetLibraryByUserIdAsync(Guid userId);
-    Task<Library?> GetByIdAsync(Guid id);
+    Task<IEnumerable<LibraryReadDto>> GetAllAsync();
+    Task<LibraryReadDto> GetLibraryByUserIdAsync(Guid userId);
+    Task<LibraryReadDto?> GetByIdAsync(Guid id);
     Task<bool> DeleteAsync(Guid id);
 }

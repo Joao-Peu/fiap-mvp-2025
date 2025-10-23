@@ -1,4 +1,5 @@
-﻿using FIAPCloudGames.Domain.Entities;
+﻿using FIAPCloudGames.Application.Dtos;
+using FIAPCloudGames.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace FIAPCloudGames.Application.Interfaces
     {
         Task<User?> AuthenticateAsync(string email, string password);
         Task<bool> DeleteAsync(Guid id);
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(Guid id);
-        Task<User> RegisterAsync(string name, string email, string password);
-        Task<User?> UpdateAsync(Guid id, string name, string email, string password);
+        Task<IEnumerable<UserReadDto>> GetAllAsync();
+        Task<UserReadDto?> GetByIdAsync(Guid id);
+        Task<UserReadDto> RegisterAsync(string name, string email, string password);
+        Task<UserReadDto?> UpdateAsync(Guid id, string name, string email, string password);
     }
 }

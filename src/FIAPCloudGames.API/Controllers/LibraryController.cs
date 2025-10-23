@@ -21,8 +21,8 @@ namespace FIAPCloudGames.API.Controllers
         {
             try
             {
-                var library = await libraryService.RegisterAsync(dto.UserId);
-                return Created($"/api/library/{library.Id}", library);
+                var libraryDto = await libraryService.RegisterAsync(dto.UserId);
+                return Created($"/api/library/{libraryDto.Id}", libraryDto);
             }
             catch (ArgumentException ex)
             {
@@ -48,12 +48,12 @@ namespace FIAPCloudGames.API.Controllers
         [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var library = await libraryService.GetByIdAsync(id);
-            if (library == null)
+            var libraryDto = await libraryService.GetByIdAsync(id);
+            if (libraryDto == null)
             {
                 return NotFound();
             }
-            return Ok(library);
+            return Ok(libraryDto);
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace FIAPCloudGames.API.Controllers
         [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetLibraryByUserId(Guid userId)
         {
-            var library = await libraryService.GetLibraryByUserIdAsync(userId);
-            return Ok(library);
+            var libraryDto = await libraryService.GetLibraryByUserIdAsync(userId);
+            return Ok(libraryDto);
         }
     }
 }

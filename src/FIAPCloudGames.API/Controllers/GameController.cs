@@ -20,8 +20,8 @@ namespace FIAPCloudGames.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateGameDto dto)
         {
-            var game = await _gameService.RegisterAsync(dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
-            return Created($"/api/game/{game.Id}", game);
+            var gameDto = await _gameService.RegisterAsync(dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
+            return Created($"/api/game/{gameDto.Id}", gameDto);
         }
 
         [HttpGet]
@@ -34,25 +34,25 @@ namespace FIAPCloudGames.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var game = await _gameService.GetByIdAsync(id);
-            if (game == null)
+            var gameDto = await _gameService.GetByIdAsync(id);
+            if (gameDto == null)
             {
                 return NotFound();
             }
 
-            return Ok(game);
+            return Ok(gameDto);
         }
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateGameDto dto)
         {
-            var game = await _gameService.UpdateAsync(id, dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
-            if (game == null)
+            var gameDto = await _gameService.UpdateAsync(id, dto.Title, dto.Description, dto.ReleaseDate, dto.Price);
+            if (gameDto == null)
             {
                 return NotFound();
             }
 
-            return Ok(game);
+            return Ok(gameDto);
         }
 
         [HttpDelete("{id}")]
