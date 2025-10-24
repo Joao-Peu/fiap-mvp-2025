@@ -1,4 +1,5 @@
 using FIAPCloudGames.Application.Dtos;
+using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,26 +13,17 @@ namespace FIAPCloudGames.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
-    public class AuthController : ControllerBase
+    public class AuthController(IUserService userService, IConfiguration config) : ControllerBase
     {
-        private readonly UserService _userService;
-        private readonly IConfiguration _config;
-
-        public AuthController(UserService userService, IConfiguration config)
-        {
-            _userService = userService;
-            _config = config;
-        }
-
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userService.AuthenticateAsync(dto.Email, dto.Password);
+            var user = await userService.AuthenticateAsync(dto.Email, dto.Password);
             if (user == null)
                 return Unauthorized(new { error = "Usu�rio ou senha inv�lidos." });
 
-            var jwtKey = _config["Jwt:Key"] ?? "super_secret_key_123!";
+            var jwtKey = config["Jwt:Key"] ?? "super_secret_key_123!";
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),

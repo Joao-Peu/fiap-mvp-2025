@@ -5,20 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FIAPCloudGames.API.Controllers
 {
+
     /// <summary>
-    /// Gerencia operações de usu�rios.
+    /// Gerencia operações de usuários.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UserController(IUserService userService, ILogger<UserController> logger) : ControllerBase
     {
-        private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
-        {
-            _userService = userService;
-        }
-
         /// <summary>
         /// Cria um novo usuário.
         /// </summary>
@@ -28,7 +22,7 @@ namespace FIAPCloudGames.API.Controllers
         {
             try
             {
-                var userDto = await _userService.RegisterAsync(dto.Name, dto.Email, dto.Password);
+                var userDto = await userService.RegisterAsync(dto.Name, dto.Email, dto.Password);
                 return Created($"/api/user/{userDto.Id}", userDto);
             }
             catch (ArgumentException ex)
@@ -44,7 +38,7 @@ namespace FIAPCloudGames.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userService.GetAllAsync();
+            var users = await userService.GetAllAsync();
             return Ok(users);
         }
 
@@ -55,7 +49,7 @@ namespace FIAPCloudGames.API.Controllers
         [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var userDto = await _userService.GetByIdAsync(id);
+            var userDto = await userService.GetByIdAsync(id);
             if (userDto == null)
             {
                 return NotFound();
@@ -74,7 +68,7 @@ namespace FIAPCloudGames.API.Controllers
         {
             try
             {
-                var userDto = await _userService.UpdateAsync(id, dto.Name, dto.Email, dto.Password);
+                var userDto = await userService.UpdateAsync(id, dto.Name, dto.Email, dto.Password);
                 if (userDto == null)
                 {
                     return NotFound();
@@ -95,7 +89,7 @@ namespace FIAPCloudGames.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var success = await _userService.DeleteAsync(id);
+            var success = await userService.DeleteAsync(id);
             if (!success)
             {
                 return NotFound();
