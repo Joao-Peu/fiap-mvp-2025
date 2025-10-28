@@ -8,6 +8,7 @@ public class Library
     public bool IsActive { get; private set; }
     public User User { get; private set; }
     public ICollection<LibraryGame> OwnedGames { get; private set; } = [];
+    public object IsDeleted { get; set; }
 
     public Library(User user)
     {

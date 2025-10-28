@@ -1,20 +1,23 @@
-ï»¿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.ValueObject;
 
-namespace FIAPCloudGames.Infra.Persistence;
-
-public class CloudGamesDbContext(DbContextOptions<CloudGamesDbContext> options) : DbContext(options)
+namespace FIAPCloudGames.Infra.Persistence
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Game> Games { get; set; }
-    public DbSet<Library> Libraries { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class CloudGamesDbContext : DbContext
     {
-        base.OnModelCreating(modelBuilder);
+        public CloudGamesDbContext(DbContextOptions<CloudGamesDbContext> options) : base(options) { }
 
-        modelBuilder.Entity<User>().HasQueryFilter(u => u.IsActive);
-        modelBuilder.Entity<Library>().HasQueryFilter(u => u.IsActive);
+        public DbSet<User> Users { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Library> Libraries { get; set; }
+        public DbSet<LibraryGame> LibraryGames { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Aplica configurações do assembly (Configurations/*.cs)
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CloudGamesDbContext).Assembly);
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
