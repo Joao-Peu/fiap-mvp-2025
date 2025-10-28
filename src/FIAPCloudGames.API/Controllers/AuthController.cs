@@ -21,7 +21,7 @@ namespace FIAPCloudGames.API.Controllers
         {
             var user = await userService.AuthenticateAsync(dto.Email, dto.Password);
             if (user == null)
-                return Unauthorized(new { error = "Usu�rio ou senha inv�lidos." });
+                return Unauthorized(new { error = "Usuário ou senha inválidos." });
 
             var jwtKey = config["Jwt:Key"] ?? "super_secret_key_123!";
             var claims = new[]
