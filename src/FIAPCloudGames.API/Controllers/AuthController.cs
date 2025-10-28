@@ -1,6 +1,5 @@
 using FIAPCloudGames.Application.Dtos;
 using FIAPCloudGames.Application.Interfaces;
-using FIAPCloudGames.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,13 +9,44 @@ using System.Text;
 
 namespace FIAPCloudGames.API.Controllers
 {
+    /// <summary>
+    /// Endpoints de autenticação e emissão de token JWT.
+    /// </summary>
+    /// <remarks>
+    /// Use este controller para autenticar um usuário e obter um token JWT.
+    /// 
+    /// O token deve ser enviado no header Authorization dos próximos requests:
+    /// 
+    /// Authorization: Bearer {seu_token}
+    /// </remarks>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
+    [Produces("application/json")]
     public class AuthController(IUserService userService, IConfiguration config) : ControllerBase
     {
+        /// <summary>
+        /// Autentica um usuário e retorna o token JWT.
+        /// </summary>
+        /// <param name="dto">Credenciais de login (email e senha).</param>
+        /// <returns>Token JWT para acesso aos endpoints protegidos.</returns>
+        /// <remarks>
+        /// Exemplo de request:
+        /// 
+        /// {
+        ///   "email": "user@fiap.com",
+        ///   "password": "Senha@123"
+        /// }
+        /// 
+        /// Respostas possíveis:
+        /// - 200 OK: token emitido com sucesso
+        /// - 401 Unauthorized: credenciais inválidas
+        /// </remarks>
         [HttpPost("login")]
         [AllowAnonymous]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var user = await userService.AuthenticateAsync(dto.Email, dto.Password);
