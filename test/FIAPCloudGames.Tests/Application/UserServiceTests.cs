@@ -26,12 +26,11 @@ public class UserServiceTests
         var email = faker.Internet.Email();
         var password = "Valid@123";
 
-        var user = await _userService.RegisterAsync(name, email, password);
+        var userDto = await _userService.RegisterAsync(name, email, password);
 
-        Assert.NotNull(user);
-        Assert.Equal(name, user.Name);
-        Assert.Equal(email, user.Email.Value);
-        Assert.Equal(password, user.Password.Value);
+        Assert.NotNull(userDto);
+        Assert.Equal(name, userDto.Name);
+        Assert.Equal(email, userDto.Email);
         await _userRepository.Received(1).AddAsync(Arg.Any<User>());
     }
 
@@ -93,7 +92,6 @@ public class UserServiceTests
         var result = await _userService.GetAllAsync();
 
         Assert.Equal(3, result.Count());
-        Assert.Equal(users, result);
     }
 
     [Fact]
@@ -130,7 +128,7 @@ public class UserServiceTests
         Assert.NotNull(result);
         Assert.Equal(user.Id, result.Id);
         Assert.Equal(user.Name, result.Name);
-        Assert.Equal(user.Email.Value, result.Email.Value);
+        Assert.Equal(user.Email.Value, result.Email);
     }
 
     [Fact]
@@ -167,8 +165,7 @@ public class UserServiceTests
 
         Assert.NotNull(result);
         Assert.Equal(newName, result.Name);
-        Assert.Equal(newEmail, result.Email.Value);
-        Assert.Equal(newPassword, result.Password.Value);
+        Assert.Equal(newEmail, result.Email);
         await _userRepository.Received(1).UpdateAsync(user);
     }
 

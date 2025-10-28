@@ -1,3 +1,5 @@
+using FIAPCloudGames.Application.Adapters;
+using FIAPCloudGames.Application.Dtos;
 using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Interfaces;
@@ -8,24 +10,26 @@ public class UserService(IUserRepository userRepository) : IUserService
 {
     private readonly IUserRepository _userRepository = userRepository;
 
-    public async Task<User> RegisterAsync(string name, string email, string password)
+    public async Task<UserReadDto> RegisterAsync(string name, string email, string password)
     {
         var user = new User(name, email, password);
         await _userRepository.AddAsync(user);
-        return user;
+        return user.ToDto();
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IEnumerable<UserReadDto>> GetAllAsync()
     {
-        return await _userRepository.GetAllAsync();
+        var users = await _userRepository.GetAllAsync();
+        return users.ToDto();
     }
 
-    public async Task<User?> GetByIdAsync(Guid id)
+    public async Task<UserReadDto?> GetByIdAsync(Guid id)
     {
-        return await _userRepository.GetByIdAsync(id);
+        var user = await _userRepository.GetByIdAsync(id);
+        return user?.ToDto();
     }
 
-    public async Task<User?> UpdateAsync(Guid id, string name, string email, string password)
+    public async Task<UserReadDto?> UpdateAsync(Guid id, string name, string email, string password)
     {
         var user = await _userRepository.GetByIdAsync(id);
         if (user == null)
@@ -37,7 +41,7 @@ public class UserService(IUserRepository userRepository) : IUserService
         user.UpdateEmail(email);
         user.UpdatePassword(password);
         await _userRepository.UpdateAsync(user);
-        return user;
+        return user.ToDto();
     }
 
     public async Task<bool> DeleteAsync(Guid id)

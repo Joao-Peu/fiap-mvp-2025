@@ -1,77 +1,75 @@
+using FIAPCloudGames.API.Extensions;
 using FIAPCloudGames.API.Middleware;
-using FIAPCloudGames.Infra.Persistence;
-using FIAPCloudGames.Application.Services;
-using Microsoft.EntityFrameworkCore;
-using FIAPCloudGames.Domain.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using FIAPCloudGames.Infra.Repositories;
-using System.Reflection;
-using FIAPCloudGames.Domain.Interfaces;
-using FIAPCloudGames.Application.Interfaces;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.File(
+        path: "logs/log-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        fileSizeLimitBytes: 10_485_760,
+        rollOnFileSizeLimit: true,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+    )
+    .CreateLogger();
 
-// Configuração do DbContext
-builder.Services.AddDbContext<CloudGamesDbContext>(options =>
-    options.UseInMemoryDatabase("CloudGamesDB")); // Trocar para SQL Server ou outro em produção
+builder.Host.UseSerilog();
 
-// Registrar repositórios e serviços
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+try
+{
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddDatabaseConfiguration(builder.Configuration);
+    builder.Services.AddDependencies();
+    builder.Services.AddJwtAuthentication(builder.Configuration);
+    builder.Services.AddSwaggerConfiguration();
+    var app = builder.Build();
+    app.UseMiddleware<ErrorHandlingMiddleware>();
 
-builder.Services.AddScoped<IGameRepository, GameRepository>();
-builder.Services.AddScoped<IGameService, GameService>();
-
-builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
-builder.Services.AddScoped<ILibraryService, LibraryService>();
-
-
-// Configuração JWT
-var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_123!";
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    if (app.Environment.IsDevelopment())
     {
-        options.TokenValidationParameters = new TokenValidationParameters
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
+    app.UseSerilogRequestLogging(options =>
+    {
+        options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} respondeu {StatusCode} em {Elapsed:0.0000} ms";
+
+        options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            diagnosticContext.Set("ClientIP", httpContext.Connection.RemoteIpAddress?.ToString());
+            diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].ToString());
+        };
+
+        options.GetLevel = (httpContext, elapsed, ex) =>
+        {
+            if (ex != null) return LogEventLevel.Error;
+            return httpContext.Response.StatusCode >= 500 ? LogEventLevel.Error : LogEventLevel.Information;
         };
     });
 
-// Configuração do Swagger com comentários XML
-builder.Services.AddSwaggerGen(options =>
+
+    app.Run();
+}
+catch (Exception ex)
 {
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-        options.IncludeXmlComments(xmlPath);
-});
-
-var app = builder.Build();
-
-// Adiciona o middleware de tratamento de erros
-app.UseMiddleware<ErrorHandlingMiddleware>();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    Log.Fatal(ex, "Erro ao inicializar a aplicação");
+}
+finally
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
 
-app.Run();
+

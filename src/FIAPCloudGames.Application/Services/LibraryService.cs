@@ -1,32 +1,32 @@
-﻿using FIAPCloudGames.Application.Interfaces;
+﻿using FIAPCloudGames.Application.Adapters;
+using FIAPCloudGames.Application.Dtos;
+using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Interfaces;
-using FIAPCloudGames.Domain.ValueObject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FIAPCloudGames.Application.Services;
 
 public class LibraryService(ILibraryRepository libraryRepository, IUserRepository userRepository, IGameRepository gameRepository) : ILibraryService
 {
-    public async Task<Library?> GetByIdAsync(Guid id)
+    public async Task<LibraryReadDto?> GetByIdAsync(Guid id)
     {
-        return await libraryRepository.GetByIdAsync(id);
+        var library = await libraryRepository.GetByIdAsync(id);
+        return library?.ToDto();
     }
 
-    public async Task<Library> GetLibraryByUserIdAsync(Guid userId)
+    public async Task<LibraryReadDto> GetLibraryByUserIdAsync(Guid userId)
     {
         var library = await libraryRepository.GetByUserIdAsync(userId) ?? throw new Exception($"Não foi criada biblioteca para o usuário {userId}.");
-        return library;
+        return library.ToDto();
     }
 
-    public async Task<IEnumerable<Library>> GetAllAsync()
+    public async Task<IEnumerable<LibraryReadDto>> GetAllAsync()
     {
-        return await libraryRepository.GetAllAsync();
+        var libraries = await libraryRepository.GetAllAsync();
+        return libraries.ToDto();
     }
 
-    public async Task<Library> RegisterAsync(Guid userId)
+    public async Task<LibraryReadDto> RegisterAsync(Guid userId)
     {
         var user = await userRepository.GetByIdAsync(userId) ?? throw new Exception($"Usuário não encontrado para o id {userId}");
         var existingLibrary = await libraryRepository.GetByUserIdAsync(userId);
@@ -37,7 +37,7 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
 
         var library = new Library(user);
         await libraryRepository.AddAsync(library);
-        return library;
+        return library.ToDto();
     }
 
     public async Task<bool> AcquireGameAsync(Guid userId, Guid gameId)
@@ -58,8 +58,13 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
     public async Task<bool> DeleteAsync(Guid id)
     {
         var library = await libraryRepository.GetByIdAsync(id) ?? throw new Exception($"Biblioteca não foi encontrada com o id {id}");
+        if (!library.IsActive)
+        {
+            return true;
+        }
+
         library.Delete();
         await libraryRepository.UpdateAsync(library);
-        return !library.IsDeleted;
+        return !library.IsActive;
     }
 }

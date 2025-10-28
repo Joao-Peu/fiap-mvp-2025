@@ -46,7 +46,10 @@ public class LibraryServiceTests
 
         Assert.NotNull(result);
         Assert.Equal(libraryId, result.Id);
-        Assert.Equal(user, result.User);
+        Assert.NotNull(result.User);
+        Assert.Equal(user.Id, result.User.Id);
+        Assert.Equal(user.Name, result.User.Name);
+        Assert.Equal(user.Email.Value, result.User.Email);
     }
 
     [Fact]
@@ -70,8 +73,11 @@ public class LibraryServiceTests
         var result = await _libraryService.GetLibraryByUserIdAsync(user.Id);
 
         Assert.NotNull(result);
-        Assert.Equal(library, result);
-        Assert.Equal(user, result.User);
+        Assert.Equal(library.Id, result.Id);
+        Assert.NotNull(result.User);
+        Assert.Equal(user.Id, result.User.Id);
+        Assert.Equal(user.Name, result.User.Name);
+        Assert.Equal(user.Email.Value, result.User.Email);
     }
 
     [Fact]
@@ -89,8 +95,11 @@ public class LibraryServiceTests
         var result = await _libraryService.GetAllAsync();
 
         Assert.Equal(2, result.Count());
-        Assert.Contains(library1, result);
-        Assert.Contains(library2, result);
+        var resultList = result.ToList();
+        Assert.Equal(library1.Id, resultList[0].Id);
+        Assert.Equal(library2.Id, resultList[1].Id);
+        Assert.Equal(user1.Id, resultList[0].User.Id);
+        Assert.Equal(user2.Id, resultList[1].User.Id);
     }
 
 
@@ -128,7 +137,10 @@ public class LibraryServiceTests
         var result = await _libraryService.RegisterAsync(user.Id);
 
         Assert.NotNull(result);
-        Assert.Equal(user, result.User);
+        Assert.NotNull(result.User);
+        Assert.Equal(user.Id, result.User.Id);
+        Assert.Equal(user.Name, result.User.Name);
+        Assert.Equal(user.Email.Value, result.User.Email);
         await _libraryRepository.Received(1).AddAsync(Arg.Any<Library>());
     }
 
@@ -210,8 +222,8 @@ public class LibraryServiceTests
 
         var result = await _libraryService.DeleteAsync(library.Id);
 
-        Assert.False(result);
-        Assert.True(library.IsDeleted);
+        Assert.True(result);
+        Assert.False(library.IsActive);
         await _libraryRepository.Received(1).UpdateAsync(library);
     }
 

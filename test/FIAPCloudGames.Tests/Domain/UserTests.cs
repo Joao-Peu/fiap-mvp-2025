@@ -8,7 +8,7 @@ namespace FIAPCloudGames.Tests.Domain;
 public class UserTests
 {
     [Fact]
-    public async Task New_ShoulReturnNewUser()
+    public async Task New_ShoulReturnNewUserAtive()
     {
         var faker = new Faker();
         var name = faker.Person.FullName;
@@ -23,6 +23,7 @@ public class UserTests
         Assert.Equal(email, user.Email.Value);
         Assert.Equal(password, user.Password.Value);
         Assert.Equal(UserRole.User, user.Role);
+        Assert.True(user.IsActive);
     }
 
     [Theory]

@@ -60,6 +60,7 @@ public class GameServiceTests
     [Fact]
     public async Task GetAll_ShouldReturnAllGames()
     {
+        const int QuantidadeGames = 3;
         var gameFaker = new Faker<Game>()
             .CustomInstantiator(f => Game.New(
                 Guid.NewGuid(),
@@ -69,14 +70,13 @@ public class GameServiceTests
                 f.Random.Decimal(10, 100)
             ));
 
-        var games = gameFaker.Generate(3);
+        var games = gameFaker.Generate(QuantidadeGames);
 
         _gameRepository.GetAllAsync().Returns(games);
 
         var result = await _gameService.GetAllAsync();
 
-        Assert.Equal(3, result.Count());
-        Assert.Equal(games, result);
+        Assert.Equal(QuantidadeGames, result.Count());
     }
 
 

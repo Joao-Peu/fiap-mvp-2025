@@ -1,3 +1,5 @@
+using FIAPCloudGames.Application.Adapters;
+using FIAPCloudGames.Application.Dtos;
 using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.Exceptions;
@@ -13,7 +15,7 @@ public class GameService : IGameService
         _gameRepository = gameRepository;
     }
 
-    public async Task<Game> RegisterAsync(string title, string description, DateTime releaseDate, decimal price)
+    public async Task<GameReadDto> RegisterAsync(string title, string description, DateTime releaseDate, decimal price)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title, nameof(title));
         if (price < 0)
@@ -23,20 +25,22 @@ public class GameService : IGameService
 
         var game = Game.New(Guid.NewGuid(), title, description, releaseDate, price);
         await _gameRepository.AddAsync(game);
-        return game;
+        return game.ToDto();
     }
 
-    public async Task<IEnumerable<Game>> GetAllAsync()
+    public async Task<IEnumerable<GameReadDto>> GetAllAsync()
     {
-        return await _gameRepository.GetAllAsync();
+        var games = await _gameRepository.GetAllAsync();
+        return games.ToDto();
     }
 
-    public async Task<Game?> GetByIdAsync(Guid id)
+    public async Task<GameReadDto?> GetByIdAsync(Guid id)
     {
-        return await _gameRepository.GetByIdAsync(id);
+        var game = await _gameRepository.GetByIdAsync(id);
+        return game?.ToDto();
     }
 
-    public async Task<Game?> UpdateAsync(Guid id, string? title, string? description, DateTime? releaseDate, decimal? price)
+    public async Task<GameReadDto?> UpdateAsync(Guid id, string? title, string? description, DateTime? releaseDate, decimal? price)
     {
         var game = await _gameRepository.GetByIdAsync(id);
         if (game == null)
@@ -46,7 +50,7 @@ public class GameService : IGameService
 
         game.Update(title, description, releaseDate, price);
         await _gameRepository.UpdateAsync(game);
-        return game;
+        return game.ToDto();
     }
 
     public async Task<bool> DeleteAsync(Guid id)
