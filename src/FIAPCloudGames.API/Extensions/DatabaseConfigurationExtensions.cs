@@ -10,9 +10,16 @@ public static class DatabaseConfigurationExtensions
         IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-        services.AddDbContext<CloudGamesDbContext>(options =>
-            options.UseSqlServer(connectionString));
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            services.AddDbContext<CloudGamesDbContext>(options =>
+                options.UseSqlServer(connectionString));
+        }
+        else
+        {
+            services.AddDbContext<CloudGamesDbContext>(options =>
+                options.UseInMemoryDatabase("CloudGamesDB"));
+        }
 
         return services;
     }
