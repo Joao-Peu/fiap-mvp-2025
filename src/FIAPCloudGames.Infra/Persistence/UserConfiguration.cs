@@ -15,14 +15,20 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                .IsRequired()
                .HasMaxLength(200);
 
-        builder.OwnsOne(typeof(Domain.ValueObject.Email), "Email", b =>
+        builder.OwnsOne(u => u.Email, b =>
         {
-            b.Property("Value").HasColumnName("Email").IsRequired().HasMaxLength(255);
+            b.Property(e => e.Value)
+                .HasColumnName("Email")
+                .IsRequired()
+                .HasMaxLength(255);
         });
 
-        builder.OwnsOne(typeof(Domain.ValueObject.Password), "Password", b =>
+        builder.OwnsOne(u => u.Password, b =>
         {
-            b.Property("Value").HasColumnName("Password").IsRequired().HasMaxLength(255);
+            b.Property(p => p.Value)
+                .HasColumnName("Password")
+                .IsRequired()
+                .HasMaxLength(255);
         });
 
         builder.Property("Role")

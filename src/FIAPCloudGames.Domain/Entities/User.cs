@@ -12,6 +12,11 @@ public class User
     public UserRole Role { get; private set; }
     public bool IsActive { get; private set; }
 
+    private User()
+    {
+
+    }
+
     public User(string name, string email, string password, UserRole role = UserRole.User)
     {
         Id = Guid.NewGuid();

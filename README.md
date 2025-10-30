@@ -1,44 +1,62 @@
-﻿# FIAP Cloud Games
+﻿# FIAP Cloud Games (FCG)
 
-> Plataforma para gestão de usuários e aquisição de jogos digitais, com autenticação JWT e persistência em banco de dados.
+> Plataforma de venda de jogos digitais e gestão de biblioteca de jogos adquiridos - MVP Fase 1
 
 ---
 
 ## 📋 Sobre o Projeto
 
-O FIAP Cloud Games é uma API desenvolvida em .NET 8, voltada para o gerenciamento de usuários e jogos digitais. Permite cadastro, autenticação, aquisição de jogos e consulta da biblioteca do usuário. O projeto é estruturado em múltiplas camadas, seguindo boas práticas de arquitetura e separação de responsabilidades.
+A FIAP Cloud Games é uma plataforma de games voltada para a educação de tecnologia. Este projeto representa a **Fase 1** do MVP, desenvolvido como Tech Challenge da FIAP.
 
-### Camadas do Projeto
+### Problema que Resolve
+- Gestão de usuários e biblioteca de jogos
+- Autenticação e autorização com diferentes níveis de acesso
+- Base sólida para futuras funcionalidades como matchmaking e gerenciamento de servidores
 
-- **FIAPCloudGames.API**: Camada de apresentação (Web API), responsável por expor endpoints REST para autenticação, usuários e jogos. Utiliza autenticação JWT, Swagger para documentação e middleware para tratamento global de erros.
-- **FIAPCloudGames.Application**: Camada de aplicação, responsável pela lógica de negócio e orquestração dos serviços. Implementa regras de cadastro, autenticação, aquisição de jogos e manipulação dos dados recebidos dos DTOs.
-- **FIAPCloudGames.Domain**: Camada de domínio, contém as entidades principais (User, Game), value objects (Email, Password) e interfaces de repositório. Centraliza as regras de negócio e validações essenciais.
-- **FIAPCloudGames.Infra**: Camada de infraestrutura, responsável pela persistência dos dados via Entity Framework Core. Implementa os repositórios concretos e o DbContext.
+### Principais Funcionalidades
+- ✅ Cadastro de usuários com validações robustas
+- ✅ Autenticação via JWT com controle de acesso
+- ✅ CRUD completo para jogos
+- ✅ Biblioteca pessoal de jogos adquiridos
+- ✅ API REST documentada com Swagger
+- ✅ Middleware para tratamento de erros e logs
+
+### Público-Alvo
+Estudantes e profissionais da FIAP, Alura e PM3 interessados em tecnologia e jogos educacionais.
 
 ---
 
 ## 🚀 Tecnologias e Ferramentas
 
 ### Backend
-- **.NET 8.0**
-- **ASP.NET Core**
-- **Entity Framework Core 9.0.9** (InMemory para testes, pode ser adaptado para SQL Server)
-- **Microsoft.AspNetCore.Authentication.JwtBearer 8.0.0**
-- **Swashbuckle.AspNetCore 6.6.2** (Swagger)
-- **System.IdentityModel.Tokens.Jwt 8.14.0**
+- **.NET 8** - Framework principal
+- **ASP.NET Core** - API REST
+- **Entity Framework Core** - ORM para persistência
+- **SQL Server** - Banco de dados principal
+- **JWT Bearer** - Autenticação e autorização
+
+### Arquitetura
+- **Domain-Driven Design (DDD)** - Organização do domínio
+- **Clean Architecture** - Separação de responsabilidades
+- **Repository Pattern** - Abstração de acesso a dados
 
 ### Testes
-- Não há projeto de testes implementado neste repositório.
+- **xUnit** - Framework de testes
+- **NSubstitute** - Mocking
+- **Bogus** - Geração de dados fake
+- **82 testes unitários** - Cobertura das principais regras de negócio
 
 ### DevOps & Ferramentas
-- **Swagger/OpenAPI** para documentação dos endpoints
+- **Swagger/OpenAPI** - Documentação de API
+- **Serilog** - Logging estruturado
+- **Entity Framework Migrations** - Controle de versão do banco
 
 ---
 
 ## 📋 Pré-requisitos
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [SQL Server](https://www.microsoft.com/sql-server) (opcional, para produção)
+- [SQL Server](https://www.microsoft.com/sql-server) ou LocalDB
 - [Git](https://git-scm.com/)
 
 ### IDEs Recomendadas
@@ -56,44 +74,181 @@ git clone https://github.com/seu-usuario/fiap-cloud-games.git
 cd fiap-cloud-games
 ```
 
-### 2. Execute a aplicação
+### 2. Restaurar dependências
 ```bash
-dotnet build
-cd FIAPCloudGames.API
+dotnet restore
+```
+
+### 3. Configurar banco de dados
+```bash
+# Aplicar migrations (estrutura corrigida)
+dotnet ef database update --project src/FIAPCloudGames.Infra --startup-project src/FIAPCloudGames.API
+```
+
+**Nota**: O projeto possui duas migrations:
+- `20251001194520_InitialCreate` - Migration inicial (estrutura básica)
+- `20250103120000_FixUserStructure` - Migration que corrige e completa a estrutura das entidades
+
+### 4. Executar a aplicação
+```bash
+cd src/FIAPCloudGames.API
 dotnet run
 ```
 
-Acesse o Swagger em `https://localhost:xxxx/swagger` para explorar os endpoints.
+### 5. Acessar a documentação
+- **Swagger UI**: https://localhost:5001/swagger
+- **API Base URL**: https://localhost:5001/api
 
 ---
 
-## 📁 Estrutura das Camadas
+## 🧪 Executando os Testes
 
-- **API**: Controllers para autenticação, usuários e jogos.
-- **Application**: Serviços para regras de negócio e DTOs.
-- **Domain**: Entidades, value objects e interfaces de repositório.
-- **Infra**: DbContext e repositórios concretos.
+```bash
+# Executar todos os testes
+dotnet test
 
----
+# Executar testes com detalhes
+dotnet test --verbosity normal
 
-## 📦 Principais Dependências
+# Gerar relatório de cobertura
+dotnet test --collect:"XPlat Code Coverage"
+```
 
-- Microsoft.AspNetCore.Authentication.JwtBearer: 8.0.0
-- Microsoft.EntityFrameworkCore: 9.0.9
-- Microsoft.EntityFrameworkCore.InMemory: 9.0.9
-- Swashbuckle.AspNetCore: 6.6.2
-- System.IdentityModel.Tokens.Jwt: 8.14.0
+**Resultado Atual**: 82 testes - ✅ Todos passando
 
 ---
 
-## ℹ️ Observações
+## 🏗️ Estrutura do Projeto
 
-- O projeto utiliza banco InMemory para facilitar testes e desenvolvimento local. Para produção, recomenda-se configurar SQL Server.
-- O Swagger está habilitado apenas em ambiente de desenvolvimento.
-- Não há frontend implementado neste repositório.
+```
+src/
+├── FIAPCloudGames.API/          # Camada de apresentação (Controllers, Middleware)
+├── FIAPCloudGames.Application/  # Camada de aplicação (Services, DTOs)
+├── FIAPCloudGames.Domain/       # Camada de domínio (Entities, Value Objects)
+└── FIAPCloudGames.Infra/        # Camada de infraestrutura (Repositories, DbContext)
+
+test/
+└── FIAPCloudGames.Tests/        # Testes unitários
+```
 
 ---
 
-## 📄 Licença
+## 🔐 Autenticação e Autorização
 
-Este projeto é apenas para fins educacionais na Pós-Graduação FIAP.
+### Níveis de Acesso
+- **Usuário**: Acesso à plataforma e biblioteca de jogos
+- **Administrador**: Pode cadastrar jogos e administrar usuários
+
+### Endpoints Principais
+
+#### Autenticação
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@example.com",
+  "password": "MinhaSenh@123"
+}
+```
+
+#### Usuários
+```http
+GET    /api/users           # Listar usuários (Admin)
+POST   /api/users           # Cadastrar usuário
+GET    /api/users/{id}      # Buscar usuário por ID
+PUT    /api/users/{id}      # Atualizar usuário
+DELETE /api/users/{id}      # Deletar usuário (Admin)
+```
+
+#### Jogos
+```http
+GET    /api/games           # Listar jogos
+POST   /api/games           # Cadastrar jogo (Admin)
+GET    /api/games/{id}      # Buscar jogo por ID
+PUT    /api/games/{id}      # Atualizar jogo (Admin)
+DELETE /api/games/{id}      # Deletar jogo (Admin)
+```
+
+#### Biblioteca
+```http
+GET    /api/library/{userId}        # Ver biblioteca do usuário
+POST   /api/library/{userId}/games  # Adquirir jogo
+```
+
+---
+
+## 📊 Qualidade de Software
+
+### Validações Implementadas
+- ✅ **Email**: Formato válido obrigatório
+- ✅ **Senha**: Mínimo 8 caracteres, letras, números e caracteres especiais
+- ✅ **Nome**: Não pode ser vazio ou nulo
+- ✅ **Preço do Jogo**: Não pode ser negativo
+
+### Patterns Aplicados
+- ✅ **Repository Pattern**: Abstração de acesso a dados
+- ✅ **Service Pattern**: Regras de negócio
+- ✅ **Value Objects**: Email e Password
+- ✅ **Exception Handling**: Middleware global
+
+### Metodologias de Teste
+- ✅ **Test-Driven Development (TDD)**: Aplicado no módulo de usuários
+- ✅ **Testes Unitários**: Cobertura completa das regras de negócio
+- ✅ **Mocking**: Isolamento de dependências nos testes
+
+---
+
+## 🎯 Funcionalidades da Fase 1
+
+### ✅ Implementadas
+- [x] API REST em .NET 8
+- [x] Cadastro de usuários com validações
+- [x] Autenticação JWT com níveis de acesso
+- [x] CRUD de jogos
+- [x] Biblioteca de jogos adquiridos
+- [x] Persistência com Entity Framework Core
+- [x] Migrations aplicadas
+- [x] Testes unitários (82 testes)
+- [x] TDD aplicado no módulo de usuários
+- [x] Middleware de tratamento de erros
+- [x] Documentação Swagger
+- [x] Arquitetura DDD
+
+### 🎯 Próximas Fases
+- [ ] Matchmaking para partidas online
+- [ ] Gerenciamento de servidores
+- [ ] Sistema de promoções
+- [ ] Integração com sistemas de pagamento
+
+---
+
+## 🤝 Como Contribuir
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+---
+
+## 📝 Licença
+
+Este projeto é desenvolvido para fins educacionais no Tech Challenge da FIAP.
+
+---
+
+## 👥 Equipe de Desenvolvimento
+
+Desenvolvido como projeto acadêmico do Tech Challenge - FIAP
+
+---
+
+## 📞 Suporte
+
+Em caso de dúvidas ou problemas, entre em contato através do Discord da FIAP.
+
+---
+
+## 🎮 FIAP Cloud Games - Educar através dos jogos! 🎮
