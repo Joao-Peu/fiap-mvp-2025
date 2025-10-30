@@ -1,7 +1,9 @@
 ﻿using FIAPCloudGames.Application.Adapters;
 using FIAPCloudGames.Application.Dtos;
+using FIAPCloudGames.Application.Exceptions;
 using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
+using FIAPCloudGames.Domain.Exceptions;
 using FIAPCloudGames.Domain.Interfaces;
 
 namespace FIAPCloudGames.Application.Services;
@@ -28,11 +30,11 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
 
     public async Task<LibraryReadDto> RegisterAsync(Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(userId) ?? throw new Exception($"Usuário não encontrado para o id {userId}");
+        var user = await userRepository.GetByIdAsync(userId) ?? throw new EntityNotFoundException(userId, nameof(User));
         var existingLibrary = await libraryRepository.GetByUserIdAsync(userId);
         if (existingLibrary != null)
         {
-            throw new Exception($"Já existe uma biblioteca criada para o usuário {user.Name}.");
+            throw new DuplicateLibraryException();
         }
 
         var library = new Library(user);
@@ -43,10 +45,10 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
     public async Task<bool> AcquireGameAsync(Guid userId, Guid gameId)
     {
         var library = await libraryRepository.GetByUserIdAsync(userId) ?? throw new Exception("Não foi possível obter a biblioteca para o usuário.");
-        var game = await gameRepository.GetByIdAsync(gameId) ?? throw new Exception($"Não foi possível encontrar o jogo com id '{gameId}'.");
+        var game = await gameRepository.GetByIdAsync(gameId) ?? throw new EntityNotFoundException(gameId, nameof(Game));
         if (await libraryRepository.ContainsGameAsync(library.Id, gameId))
         {
-            throw new Exception("O jogo já existe na biblioteca.");
+            throw new DuplicateGameInLibraryException();
         }
 
         var ownedGame = new LibraryGame(library, game);
@@ -57,7 +59,7 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var library = await libraryRepository.GetByIdAsync(id) ?? throw new Exception($"Biblioteca não foi encontrada com o id {id}");
+        var library = await libraryRepository.GetByIdAsync(id) ?? throw new EntityNotFoundException(id, nameof(Library));
         if (!library.IsActive)
         {
             return true;

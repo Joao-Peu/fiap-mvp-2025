@@ -1,6 +1,8 @@
 ﻿using Bogus;
+using FIAPCloudGames.Application.Exceptions;
 using FIAPCloudGames.Application.Services;
 using FIAPCloudGames.Domain.Entities;
+using FIAPCloudGames.Domain.Exceptions;
 using FIAPCloudGames.Domain.Interfaces;
 using NSubstitute;
 
@@ -109,7 +111,7 @@ public class LibraryServiceTests
         var nonExistentUserId = Guid.NewGuid();
         _userRepository.GetByIdAsync(nonExistentUserId).Returns((User?)null);
 
-        await Assert.ThrowsAsync<Exception>(async () => await _libraryService.RegisterAsync(nonExistentUserId));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await _libraryService.RegisterAsync(nonExistentUserId));
     }
 
     [Fact]
@@ -122,7 +124,7 @@ public class LibraryServiceTests
         _userRepository.GetByIdAsync(user.Id).Returns(user);
         _libraryRepository.GetByUserIdAsync(user.Id).Returns(existingLibrary);
 
-        await Assert.ThrowsAsync<Exception>(async () => await _libraryService.RegisterAsync(user.Id));
+        await Assert.ThrowsAsync<DuplicateLibraryException>(async () => await _libraryService.RegisterAsync(user.Id));
     }
 
     [Fact]
@@ -166,7 +168,7 @@ public class LibraryServiceTests
         _libraryRepository.GetByUserIdAsync(user.Id).Returns(library);
         _gameRepository.GetByIdAsync(nonExistentGameId).Returns((Game?)null);
 
-        await Assert.ThrowsAsync<Exception>(async () => await _libraryService.AcquireGameAsync(user.Id, nonExistentGameId));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await _libraryService.AcquireGameAsync(user.Id, nonExistentGameId));
     }
 
     [Fact]
@@ -181,7 +183,7 @@ public class LibraryServiceTests
         _gameRepository.GetByIdAsync(game.Id).Returns(game);
         _libraryRepository.ContainsGameAsync(library.Id, game.Id).Returns(true);
 
-        await Assert.ThrowsAsync<Exception>(async () => await _libraryService.AcquireGameAsync(user.Id, game.Id));
+        await Assert.ThrowsAsync<DuplicateGameInLibraryException>(async () => await _libraryService.AcquireGameAsync(user.Id, game.Id));
     }
 
     [Fact]
@@ -208,7 +210,7 @@ public class LibraryServiceTests
         var nonExistentId = Guid.NewGuid();
         _libraryRepository.GetByIdAsync(nonExistentId).Returns((Library?)null);
 
-        await Assert.ThrowsAsync<Exception>(async () => await _libraryService.DeleteAsync(nonExistentId));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await _libraryService.DeleteAsync(nonExistentId));
     }
 
     [Fact]
