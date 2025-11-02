@@ -1,10 +1,13 @@
 ﻿namespace FIAPCloudGames.Domain.ValueObject
 {
-    public class Password
+    public record Password
     {
         private const int MininumLength = 8;
 
-        public string Value { get; }
+        public string Value { get; private set; }
+        private Password()
+        {
+        }
         public Password(string value)
         {
             if (!IsPasswordValid(value))

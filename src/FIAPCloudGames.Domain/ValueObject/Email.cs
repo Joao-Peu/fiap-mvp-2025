@@ -3,9 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FIAPCloudGames.Domain.ValueObject
 {
-    public class Email
+    public record Email
     {
-        public string Value { get; }
+        public string Value { get; private set; }
+        private Email()
+        {
+        }
         public Email(string value)
         {
             if (string.IsNullOrWhiteSpace(value) || !IsValidEmail(value))

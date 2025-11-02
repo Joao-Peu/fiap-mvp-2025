@@ -9,8 +9,14 @@ public class Library
     public User User { get; private set; }
     public ICollection<LibraryGame> OwnedGames { get; private set; } = [];
 
+    private Library()
+    {
+        
+    }
+
     public Library(User user)
     {
+        Id = Guid.NewGuid();
         User = user;
         IsActive = true;
         OwnedGames = [];
