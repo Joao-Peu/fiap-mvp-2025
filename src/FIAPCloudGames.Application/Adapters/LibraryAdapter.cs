@@ -16,7 +16,7 @@ namespace FIAPCloudGames.Application.Adapters
             return new LibraryGameReadDto
             {
                 Id = libraryGame.Id,
-                Game = libraryGame.Game.ToDto()
+                Game = libraryGame.Game?.ToDto() ?? throw new InvalidOperationException("Game não foi carregado na consulta do LibraryGame")
             };
         }
 
@@ -29,8 +29,8 @@ namespace FIAPCloudGames.Application.Adapters
             {
                 Id = library.Id,
                 IsActive = library.IsActive,
-                User = library.User.ToDto(),
-                OwnedGames = [.. library.OwnedGames.Select(lg => lg.ToDto())]
+                User = library.User?.ToDto() ?? throw new InvalidOperationException("User não foi carregado na consulta da Library"),
+                OwnedGames = [.. library.OwnedGames?.Select(lg => lg.ToDto()) ?? []]
             };
         }
 

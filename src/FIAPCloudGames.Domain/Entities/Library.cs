@@ -29,9 +29,10 @@ public class Library
 
     public void AddAcquiredGame(LibraryGame libraryGame)
     {
-        if (OwnedGames.Contains(libraryGame))
+        // Verificar se o jogo já existe na biblioteca
+        if (OwnedGames.Any(og => og.Game.Id == libraryGame.Game.Id))
         {
-            return;
+            return; // Jogo já existe, não adicionar duplicata
         }
 
         OwnedGames.Add(libraryGame);

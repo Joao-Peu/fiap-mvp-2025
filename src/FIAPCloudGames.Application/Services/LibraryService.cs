@@ -44,16 +44,23 @@ public class LibraryService(ILibraryRepository libraryRepository, IUserRepositor
 
     public async Task<bool> AcquireGameAsync(Guid userId, Guid gameId)
     {
-        var library = await libraryRepository.GetByUserIdAsync(userId) ?? throw new Exception("Não foi possível obter a biblioteca para o usuário.");
-        var game = await gameRepository.GetByIdAsync(gameId) ?? throw new EntityNotFoundException(gameId, nameof(Game));
+        // Buscar a biblioteca do usuário
+        var library = await libraryRepository.GetByUserIdAsync(userId) 
+            ?? throw new Exception("Não foi possível obter a biblioteca para o usuário.");
+        
+        // Verificar se o jogo existe
+        var game = await gameRepository.GetByIdAsync(gameId) 
+            ?? throw new EntityNotFoundException(gameId, nameof(Game));
+        
+        // Verificar se o jogo já está na biblioteca
         if (await libraryRepository.ContainsGameAsync(library.Id, gameId))
         {
             throw new DuplicateGameInLibraryException();
         }
 
-        var ownedGame = new LibraryGame(library, game);
-        library.AddAcquiredGame(ownedGame);
-        await libraryRepository.UpdateAsync(library);
+        // Adicionar o jogo à biblioteca diretamente
+        await libraryRepository.AddGameToLibraryAsync(library.Id, gameId);
+        
         return true;
     }
 

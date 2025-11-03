@@ -11,5 +11,5 @@ public interface ILibraryRepository
     Task RemoveAsync(Library library);
     Task UpdateAsync(Library library);
     Task<bool> ContainsGameAsync(Guid libraryId, Guid gameId);
-
+    Task AddGameToLibraryAsync(Guid libraryId, Guid gameId);
 }

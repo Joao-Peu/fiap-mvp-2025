@@ -81,21 +81,31 @@ dotnet restore
 
 ### 3. Configurar banco de dados
 ```bash
-# Aplicar migrations (estrutura corrigida)
-dotnet ef database update --project src/FIAPCloudGames.Infra --startup-project src/FIAPCloudGames.API
+# Aplicar migrations
+cd src/FIAPCloudGames.API
+dotnet ef database update
 ```
 
-**Nota**: O projeto possui duas migrations:
-- `20251001194520_InitialCreate` - Migration inicial (estrutura básica)
-- `20250103120000_FixUserStructure` - Migration que corrige e completa a estrutura das entidades
+### 4. Criar usuário administrador inicial
+```bash
+# Executar SQL manualmente
+sqlcmd -S "(localdb)\mssqllocaldb" -d CloudGamesDb -i scripts/insert-admin-user.sql
+```
 
-### 4. Executar a aplicação
+**Credenciais do Admin criado:**
+- 📧 **Email**: `admin@fiap.com`
+- 🔑 **Senha**: `Admin@123`
+- 👤 **Role**: `Admin`
+
+⚠️ **Importante**: Altere a senha após o primeiro login!
+
+### 5. Executar a aplicação
 ```bash
 cd src/FIAPCloudGames.API
 dotnet run
 ```
 
-### 5. Acessar a documentação
+### 6. Acessar a documentação
 - **Swagger UI**: https://localhost:5001/swagger
 - **API Base URL**: https://localhost:5001/api
 
