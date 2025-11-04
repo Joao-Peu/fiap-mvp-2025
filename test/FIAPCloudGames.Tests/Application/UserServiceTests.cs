@@ -34,6 +34,20 @@ public class UserServiceTests
         await _userRepository.Received(1).AddAsync(Arg.Any<User>());
     }
 
+    [Fact]
+    public async Task Register_ShouldThrowException_WhenEmailExists()
+    {
+        var faker = new Faker();
+        var name = faker.Person.FullName;
+        var email = faker.Internet.Email();
+        var password = "Valid@123";
+
+        _userRepository.EmailExistsAsync(email).Returns(true);
+
+        await Assert.ThrowsAsync<EmailAlreadyExistsForUserException>(async () =>
+            await _userService.RegisterAsync(name, email, password));
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]

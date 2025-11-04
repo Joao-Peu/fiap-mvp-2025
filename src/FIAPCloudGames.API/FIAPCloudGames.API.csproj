@@ -10,16 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include=".github\FIAP\Auth.md" />
-    <None Include=".github\FIAP\challenge.md" />
-    <None Include=".github\FIAP\documentation.instructions.md" />
-    <None Include=".github\FIAP\dotnet-readme-template.md" />
-    <None Include=".github\FIAP\Test.md" />
-    <None Include=".github\FIAP\User.md" />
-    <None Include=".github\FIAP\Validation.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -35,6 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\FIAPCloudGames.Application\FIAPCloudGames.Application.csproj" />
     <ProjectReference Include="..\FIAPCloudGames.Infra\FIAPCloudGames.Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include=".github\" />
   </ItemGroup>
 
 </Project>
