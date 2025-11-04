@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIAPCloudGames.Infra.Migrations
 {
     [DbContext(typeof(CloudGamesDbContext))]
-    [Migration("20251030230732_Initial")]
-    partial class Initial
+    [Migration("20251104015410_Initial_Create")]
+    partial class Initial_Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,6 +121,15 @@ namespace FIAPCloudGames.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            IsActive = true,
+                            Name = "Administrador",
+                            Role = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("FIAPCloudGames.Domain.Entities.Library", b =>
@@ -172,6 +181,13 @@ namespace FIAPCloudGames.Infra.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                                    Value = "admin@seudominio.com"
+                                });
                         });
 
                     b.OwnsOne("FIAPCloudGames.Domain.ValueObject.Password", "Password", b1 =>
@@ -191,6 +207,13 @@ namespace FIAPCloudGames.Infra.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                                    Value = "SenhaAdmin@123"
+                                });
                         });
 
                     b.Navigation("Email")

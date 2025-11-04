@@ -201,7 +201,7 @@ public class LibraryServiceTests
         var result = await _libraryService.AcquireGameAsync(user.Id, game.Id);
 
         Assert.True(result);
-        await _libraryRepository.Received(1).UpdateAsync(library);
+        await _libraryRepository.Received(1).AddGameToLibraryAsync(library.Id, game.Id);
     }
 
     [Fact]

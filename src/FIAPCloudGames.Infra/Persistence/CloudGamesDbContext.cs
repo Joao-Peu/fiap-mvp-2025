@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FIAPCloudGames.Domain.Entities;
 using FIAPCloudGames.Domain.ValueObject;
+using FIAPCloudGames.Infra.Seeders;
 
 namespace FIAPCloudGames.Infra.Persistence
 {
@@ -20,6 +21,8 @@ namespace FIAPCloudGames.Infra.Persistence
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CloudGamesDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
+
+            UserSeeder.Seed(modelBuilder);
         }
     }
 }

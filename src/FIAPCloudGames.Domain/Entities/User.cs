@@ -43,4 +43,6 @@ public class User
     {
         Password = new Password(password);
     }
+
+    public void Inactivate() => IsActive = false;
 }

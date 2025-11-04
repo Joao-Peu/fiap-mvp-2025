@@ -40,13 +40,18 @@ namespace FIAPCloudGames.Infra.Repositories
 
         public async Task RemoveAsync(User user)
         {
-            _context.Users.Remove(user);
+            user.Inactivate();
             await _context.SaveChangesAsync();
         }
 
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users.Include(u => u.Email).Include(u => u.Password).FirstOrDefaultAsync(u => u.Email.Value == email);
+        }
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return (await _context.Users.Select(x => x.Email).AsNoTracking().FirstOrDefaultAsync(x => x.Value.Equals(email))) != null;
         }
     }
 }

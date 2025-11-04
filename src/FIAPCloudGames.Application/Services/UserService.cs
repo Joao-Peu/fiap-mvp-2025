@@ -2,6 +2,7 @@ using FIAPCloudGames.Application.Adapters;
 using FIAPCloudGames.Application.Dtos;
 using FIAPCloudGames.Application.Interfaces;
 using FIAPCloudGames.Domain.Entities;
+using FIAPCloudGames.Domain.Exceptions;
 using FIAPCloudGames.Domain.Interfaces;
 
 namespace FIAPCloudGames.Application.Services;
@@ -13,6 +14,12 @@ public class UserService(IUserRepository userRepository) : IUserService
     public async Task<UserReadDto> RegisterAsync(string name, string email, string password)
     {
         var user = new User(name, email, password);
+
+        if (await _userRepository.EmailExistsAsync(email))
+        {
+            throw new EmailAlreadyExistsForUserException();
+        }
+        
         await _userRepository.AddAsync(user);
         return user.ToDto();
     }

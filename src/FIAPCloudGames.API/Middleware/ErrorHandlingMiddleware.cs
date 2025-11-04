@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+Ôªøusing Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
@@ -9,28 +9,17 @@ using FIAPCloudGames.Domain.Exceptions;
 
 namespace FIAPCloudGames.API.Middleware
 {
-    public class ErrorHandlingMiddleware
+    public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger, IWebHostEnvironment environment)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlingMiddleware> _logger;
-        private readonly IWebHostEnvironment _environment;
-
-        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger, IWebHostEnvironment environment)
-        {
-            _next = next;
-            _logger = logger;
-            _environment = environment;
-        }
-
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro n„o tratado: {Message}", ex.Message);
+                logger.LogError(ex, "Erro n√£o tratado: {Message}", ex.Message);
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -40,14 +29,13 @@ namespace FIAPCloudGames.API.Middleware
             object response;
             int statusCode;
 
-            // Tratar exceÁıes especÌficas do domÌnio
             switch (exception)
             {
                 case EntityNotFoundException entityNotFound:
                     statusCode = (int)HttpStatusCode.NotFound;
                     response = new
                     {
-                        error = "Recurso n„o encontrado",
+                        error = "Recurso n√£o encontrado",
                         details = entityNotFound.Message,
                         path = context.Request.Path,
                         timestamp = DateTime.UtcNow
@@ -58,7 +46,7 @@ namespace FIAPCloudGames.API.Middleware
                     statusCode = (int)HttpStatusCode.BadRequest;
                     response = new
                     {
-                        error = "Jogo j· existe na biblioteca",
+                        error = "Jogo j√° existe na biblioteca",
                         details = exception.Message,
                         path = context.Request.Path,
                         timestamp = DateTime.UtcNow
@@ -69,7 +57,7 @@ namespace FIAPCloudGames.API.Middleware
                     statusCode = (int)HttpStatusCode.BadRequest;
                     response = new
                     {
-                        error = "Usu·rio j· possui uma biblioteca",
+                        error = "Usu√°rio j√° possui uma biblioteca",
                         details = exception.Message,
                         path = context.Request.Path,
                         timestamp = DateTime.UtcNow
@@ -80,7 +68,18 @@ namespace FIAPCloudGames.API.Middleware
                     statusCode = (int)HttpStatusCode.BadRequest;
                     response = new
                     {
-                        error = "Email inv·lido",
+                        error = "Email inv√°lido",
+                        details = exception.Message,
+                        path = context.Request.Path,
+                        timestamp = DateTime.UtcNow
+                    };
+                    break;
+
+                case EmailAlreadyExistsForUserException:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    response = new
+                    {
+                        error = "Email j√° existente para o usu√°rio",
                         details = exception.Message,
                         path = context.Request.Path,
                         timestamp = DateTime.UtcNow
@@ -91,7 +90,7 @@ namespace FIAPCloudGames.API.Middleware
                     statusCode = (int)HttpStatusCode.BadRequest;
                     response = new
                     {
-                        error = "Dados inv·lidos",
+                        error = "Dados inv√°lidos",
                         details = argEx.Message,
                         path = context.Request.Path,
                         timestamp = DateTime.UtcNow
@@ -101,8 +100,7 @@ namespace FIAPCloudGames.API.Middleware
                 default:
                     statusCode = (int)HttpStatusCode.InternalServerError;
                     
-                    // Em desenvolvimento, mostrar mais detalhes
-                    if (_environment.IsDevelopment())
+                    if (environment.IsDevelopment())
                     {
                         response = new
                         {

@@ -19,7 +19,7 @@ namespace FIAPCloudGames.API.Controllers
     public class UserController(IUserService userService, ILogger<UserController> logger) : ControllerBase
     {
         /// <summary>
-        /// Cria um novo usuário.
+        /// Cria um novo usuário de Role User.
         /// </summary>
         /// <param name="dto">Dados do usuário (nome, email, senha).</param>
         /// <returns>Usuário criado.</returns>
@@ -28,7 +28,7 @@ namespace FIAPCloudGames.API.Controllers
         /// <response code="401">Não autenticado.</response>
         /// <response code="403">Sem permissão.</response>
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(UserReadDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
